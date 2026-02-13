@@ -2,13 +2,43 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
+  padding: 16px;
+  background-color: #f5f5f5;
 }
 
-.tabs-wrapper {
-  background: white;
-  border-radius: 8px;
+.network-tabs {
+  display: flex;
+  gap: 0;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.tab-button {
+  flex: 1;
   padding: 12px 16px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  border: none;
+  background-color: #f5f5f5;
+  border-right: 1px solid #e0e0e0;
+  color: #666;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.tab-button:last-child {
+  border-right: none;
+}
+
+.tab-button:hover {
+  background-color: #efefef;
+}
+
+.tab-button.active {
+  background-color: #0078d4;
+  color: #fff;
 }
 
 .stats-content,
@@ -18,11 +48,42 @@
   gap: 16px;
 }
 
-.chart-card,
-.summary-card {
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+.network-card {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.network-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.network-card-header h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.card-icon {
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.network-card-content {
+  padding: 16px;
+}
+
+.chart-card .network-card-content {
+  padding: 0;
 }
 
 .summary-grid {
@@ -33,9 +94,16 @@
 
 .summary-item {
   padding: 12px;
-  border: 1px solid #e1dfdd;
-  border-radius: 6px;
-  background: #f7f6f5;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  background: #f5f5f5;
+}
+
+.iface-name {
+  font-size: 12px;
+  color: #999;
+  margin-bottom: 8px;
+  font-weight: 500;
 }
 
 .summary-item .metrics {
@@ -51,13 +119,15 @@
 }
 
 .metric .label {
-  font-size: 12px;
-  color: #666;
+  font-size: 11px;
+  color: #999;
   font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .metric .value {
-  font-size: 14px;
+  font-size: 13px;
   color: #333;
   font-weight: 600;
 }
@@ -69,14 +139,11 @@
 }
 
 .interface-card {
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
   transition: box-shadow 0.2s ease;
 }
 
 .interface-card:hover {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 }
 
 .interface-details {
@@ -89,7 +156,7 @@
   display: flex;
   justify-content: space-between;
   padding: 8px 0;
-  border-bottom: 1px solid #e1dfdd;
+  border-bottom: 1px solid #e0e0e0;
 }
 
 .detail-row:last-child {
@@ -98,12 +165,12 @@
 
 .detail-row .label {
   font-weight: 500;
-  color: #333;
+  color: #666;
   min-width: 80px;
 }
 
 .detail-row .value {
-  color: #666;
+  color: #333;
   text-align: right;
   flex: 1;
   margin-left: 12px;
@@ -116,7 +183,7 @@
 }
 
 .status-down {
-  color: #d83b01;
+  color: #d13438;
   font-weight: 600;
 }
 
@@ -135,6 +202,10 @@
   justify-content: center;
   padding: 48px 16px;
   color: #999;
+}
+
+.empty-state p {
+  margin: 0;
 }
 
 @media (max-width: 1024px) {

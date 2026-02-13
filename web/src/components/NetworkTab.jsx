@@ -1,14 +1,5 @@
 import { useState, useEffect } from 'react'
 import {
-  Card,
-  CardHeader,
-  CardPreview,
-  Text,
-  Tab,
-  TabList,
-} from '@fluentui/react-components'
-import { Network24Filled } from '@fluentui/react-icons'
-import {
   LineChart,
   Line,
   XAxis,
@@ -70,30 +61,38 @@ export default function NetworkTab() {
 
   return (
     <div className="network-container">
-      <div className="tabs-wrapper">
-        <TabList
-          selectedValue={selectedTab}
-          onTabSelect={(e, data) => setSelectedTab(data.value)}
+      <div className="network-tabs">
+        <button 
+          className={`tab-button ${selectedTab === 'stats' ? 'active' : ''}`}
+          onClick={() => setSelectedTab('stats')}
         >
-          <Tab value="stats">统计信息</Tab>
-          <Tab value="interfaces">网络接口</Tab>
-        </TabList>
+          统计信息
+        </button>
+        <button 
+          className={`tab-button ${selectedTab === 'interfaces' ? 'active' : ''}`}
+          onClick={() => setSelectedTab('interfaces')}
+        >
+          网络接口
+        </button>
       </div>
 
       {selectedTab === 'stats' && (
         <div className="stats-content">
           {networkHistory.length > 1 && (
-            <Card className="chart-card">
-              <CardHeader header={<Text weight="semibold">网络流量趋势</Text>} />
-              <CardPreview style={{ padding: '0' }}>
+            <div className="network-card chart-card">
+              <div className="network-card-header">
+                <span className="card-icon">📈</span>
+                <h3>网络流量趋势</h3>
+              </div>
+              <div className="network-card-content">
                 <ResponsiveContainer width="100%" height={300}>
                   <LineChart data={networkHistory} margin={{ top: 5, right: 30, left: 0, bottom: 5 }}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#e1dfdd" />
+                    <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
                     <XAxis dataKey="time" stroke="#666" style={{ fontSize: '12px' }} />
                     <YAxis stroke="#666" style={{ fontSize: '12px' }} />
                     <Tooltip
                       formatter={(value) => formatBytes(value)}
-                      contentStyle={{ backgroundColor: '#fff', border: '1px solid #e1dfdd' }}
+                      contentStyle={{ backgroundColor: '#fff', border: '1px solid #e0e0e0' }}
                     />
                     <Legend />
                     <Line
@@ -112,19 +111,20 @@ export default function NetworkTab() {
                     />
                   </LineChart>
                 </ResponsiveContainer>
-              </CardPreview>
-            </Card>
+              </div>
+            </div>
           )}
 
-          <Card className="summary-card">
-            <CardHeader header={<Text weight="semibold">总体统计</Text>} />
-            <CardPreview style={{ padding: '16px' }}>
+          <div className="network-card summary-card">
+            <div className="network-card-header">
+              <span className="card-icon">🌐</span>
+              <h3>总体统计</h3>
+            </div>
+            <div className="network-card-content">
               <div className="summary-grid">
                 {networkInfo.interfaces.map((net, idx) => (
                   <div key={idx} className="summary-item">
-                    <Text size={200} style={{ color: '#666' }}>
-                      {net.iface}
-                    </Text>
+                    <div className="iface-name">{net.iface}</div>
                     <div className="metrics">
                       <div className="metric">
                         <span className="label">收</span>
@@ -138,8 +138,8 @@ export default function NetworkTab() {
                   </div>
                 ))}
               </div>
-            </CardPreview>
-          </Card>
+            </div>
+          </div>
         </div>
       )}
 
@@ -147,16 +147,12 @@ export default function NetworkTab() {
         <div className="interfaces-content">
           <div className="interfaces-grid">
             {networkInfo.physicalInterfaces.map((iface, idx) => (
-              <Card key={idx} className="interface-card">
-                <CardHeader
-                  header={
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <Network24Filled style={{ color: '#0078d4' }} />
-                      <Text weight="semibold">{iface.ifname}</Text>
-                    </div>
-                  }
-                />
-                <CardPreview style={{ padding: '16px' }}>
+              <div key={idx} className="network-card interface-card">
+                <div className="network-card-header">
+                  <span className="card-icon">📡</span>
+                  <h3>{iface.ifname}</h3>
+                </div>
+                <div className="network-card-content">
                   <div className="interface-details">
                     <div className="detail-row">
                       <span className="label">状态</span>
@@ -195,14 +191,14 @@ export default function NetworkTab() {
                       </div>
                     )}
                   </div>
-                </CardPreview>
-              </Card>
+                </div>
+              </div>
             ))}
           </div>
 
           {networkInfo.physicalInterfaces.length === 0 && (
             <div className="empty-state">
-              <Text style={{ color: '#999' }}>未找到网络接口信息</Text>
+              <p>未找到网络接口信息</p>
             </div>
           )}
         </div>

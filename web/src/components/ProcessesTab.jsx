@@ -1,17 +1,4 @@
 import { useState, useEffect } from 'react'
-import {
-  DataGrid,
-  DataGridHeader,
-  DataGridRow,
-  DataGridHeaderCell,
-  DataGridCell,
-  Button,
-  SearchBox,
-  Card,
-  CardHeader,
-  Text,
-} from '@fluentui/react-components'
-import { Dismiss24Regular } from '@fluentui/react-icons'
 import './ProcessesTab.css'
 
 export default function ProcessesTab() {
@@ -68,40 +55,25 @@ export default function ProcessesTab() {
     return (bytes / 1024 / 1024 / 1024).toFixed(2) + ' GB'
   }
 
-  const SortableHeader = ({ column, children }) => (
-    <button
-      onClick={() => handleSort(column)}
-      style={{
-        background: 'none',
-        border: 'none',
-        cursor: 'pointer',
-        padding: '8px',
-        font: 'inherit',
-        fontWeight: sortBy === column ? '600' : 'normal',
-        textAlign: 'left',
-        width: '100%',
-      }}
-    >
-      {children}
-      {sortBy === column && (sortOrder === 'desc' ? ' ↓' : ' ↑')}
-    </button>
-  )
+  const SortIndicator = ({ column }) => {
+    if (sortBy !== column) return null
+    return <span className="sort-indicator">{sortOrder === 'desc' ? ' ↓' : ' ↑'}</span>
+  }
 
   return (
     <div className="processes-container">
-      <Card className="processes-card">
-        <CardHeader
-          header={
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, flex: 1 }}>
-              <Text weight="semibold">进程列表 ({filteredProcesses.length})</Text>
-            </div>
-          }
-        />
+      <div className="processes-card">
+        <div className="processes-header">
+          <span className="header-icon">🖱️</span>
+          <h3>进程列表 ({filteredProcesses.length})</h3>
+        </div>
+
         <div className="processes-toolbar">
-          <SearchBox
+          <input
+            type="search"
             placeholder="搜索进程名称或 PID..."
             value={searchText}
-            onChange={(e, data) => setSearchText(data.value)}
+            onChange={(e) => setSearchText(e.target.value)}
             className="search-box"
           />
         </div>
@@ -111,19 +83,34 @@ export default function ProcessesTab() {
             <thead>
               <tr>
                 <th style={{ width: '80px' }}>
-                  <SortableHeader column="pid">PID</SortableHeader>
+                  <button className="sort-button" onClick={() => handleSort('pid')}>
+                    PID
+                    <SortIndicator column="pid" />
+                  </button>
                 </th>
                 <th style={{ flex: 1 }}>
-                  <SortableHeader column="name">进程名称</SortableHeader>
+                  <button className="sort-button" onClick={() => handleSort('name')}>
+                    进程名称
+                    <SortIndicator column="name" />
+                  </button>
                 </th>
                 <th style={{ width: '100px' }}>
-                  <SortableHeader column="cpu">CPU %</SortableHeader>
+                  <button className="sort-button" onClick={() => handleSort('cpu')}>
+                    CPU %
+                    <SortIndicator column="cpu" />
+                  </button>
                 </th>
                 <th style={{ width: '120px' }}>
-                  <SortableHeader column="mem">内存</SortableHeader>
+                  <button className="sort-button" onClick={() => handleSort('mem')}>
+                    内存
+                    <SortIndicator column="mem" />
+                  </button>
                 </th>
                 <th style={{ width: '100px' }}>
-                  <SortableHeader column="user">用户</SortableHeader>
+                  <button className="sort-button" onClick={() => handleSort('user')}>
+                    用户
+                    <SortIndicator column="user" />
+                  </button>
                 </th>
               </tr>
             </thead>
@@ -159,10 +146,10 @@ export default function ProcessesTab() {
 
         {filteredProcesses.length === 0 && (
           <div className="empty-state">
-            <Text style={{ color: '#666' }}>没有找到匹配的进程</Text>
+            <p>没有找到匹配的进程</p>
           </div>
         )}
-      </Card>
+      </div>
     </div>
   )
 }

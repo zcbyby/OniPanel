@@ -1,12 +1,4 @@
 import { useState, useEffect } from 'react'
-import {
-  Card,
-  CardHeader,
-  CardPreview,
-  Text,
-  ProgressBar,
-} from '@fluentui/react-components'
-import { HardDrive24Filled } from '@fluentui/react-icons'
 import './DiskTab.css'
 
 export default function DiskTab() {
@@ -45,35 +37,37 @@ export default function DiskTab() {
       <div className="disk-grid">
         {diskInfo.disks.map((disk, idx) => {
           const usagePercent = (disk.used / disk.size) * 100
-          const statusColor = usagePercent > 90 ? 'error' : usagePercent > 70 ? 'warning' : 'success'
+          const statusColor = usagePercent > 90 ? '#d13438' : usagePercent > 70 ? '#ffc107' : '#107c10'
 
           return (
-            <Card key={idx} className="disk-card">
-              <CardHeader
-                header={
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <HardDrive24Filled style={{ color: '#0078d4' }} />
-                    <div>
-                      <Text weight="semibold">{disk.mount}</Text>
-                      <Text size={200} style={{ color: '#666' }}>
-                        {disk.fs}
-                      </Text>
-                    </div>
-                  </div>
-                }
-              />
-              <CardPreview style={{ padding: '16px' }}>
-                <div style={{ marginBottom: '16px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
-                    <Text size={300}>使用空间</Text>
-                    <Text weight="semibold" size={300}>
+            <div key={idx} className="disk-card">
+              <div className="disk-card-header">
+                <span className="disk-icon">💿</span>
+                <div className="disk-header-content">
+                  <h4>{disk.mount}</h4>
+                  <span className="disk-fs">{disk.fs}</span>
+                </div>
+              </div>
+              <div className="disk-card-content">
+                <div className="disk-usage">
+                  <div className="usage-label">
+                    <span>使用空间</span>
+                    <span className="usage-value">
                       {formatBytes(disk.used)} / {formatBytes(disk.size)}
-                    </Text>
+                    </span>
                   </div>
-                  <ProgressBar value={usagePercent / 100} color={statusColor} />
-                  <Text size={200} style={{ color: '#666', marginTop: 4 }}>
+                  <div className="progress-bar">
+                    <div 
+                      className="progress-fill" 
+                      style={{
+                        width: `${usagePercent}%`,
+                        backgroundColor: statusColor
+                      }}
+                    ></div>
+                  </div>
+                  <div className="usage-stat">
                     {usagePercent.toFixed(2)}% 已用 · {formatBytes(disk.available)} 可用
-                  </Text>
+                  </div>
                 </div>
 
                 <div className="disk-details">
@@ -86,15 +80,15 @@ export default function DiskTab() {
                     <span className="value">{disk.rw ? '读写' : '只读'}</span>
                   </div>
                 </div>
-              </CardPreview>
-            </Card>
+              </div>
+            </div>
           )
         })}
       </div>
 
       {diskInfo.disks.length === 0 && (
         <div className="empty-state">
-          <Text style={{ color: '#999' }}>未找到磁盘信息</Text>
+          <p>未找到磁盘信息</p>
         </div>
       )}
     </div>

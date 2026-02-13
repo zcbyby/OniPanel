@@ -1,22 +1,23 @@
-.header {
+.win-header {
   background: linear-gradient(135deg, #0078d4 0%, #1090d8 100%);
   color: white;
-  padding: 20px 30px;
+  padding: 16px 24px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 }
 
 .header-left h1 {
   margin: 0;
-  font-size: 28px;
+  font-size: 24px;
   font-weight: 600;
+  letter-spacing: -0.5px;
 }
 
 .header-left p {
-  margin: 5px 0 0 0;
-  font-size: 14px;
+  margin: 4px 0 0 0;
+  font-size: 13px;
   opacity: 0.9;
 }
 
@@ -30,23 +31,24 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 14px;
+  font-size: 13px;
+  white-space: nowrap;
 }
 
 .info-item .icon {
-  font-size: 20px;
+  font-size: 16px;
 }
 
 .divider {
   width: 1px;
-  height: 24px;
+  height: 20px;
   background: rgba(255, 255, 255, 0.3);
 }
 
 @media (max-width: 768px) {
-  .header {
+  .win-header {
     flex-direction: column;
-    gap: 15px;
+    gap: 12px;
     text-align: center;
   }
 
@@ -55,6 +57,6 @@
   }
 
   .header-left h1 {
-    font-size: 24px;
+    font-size: 20px;
   }
 }

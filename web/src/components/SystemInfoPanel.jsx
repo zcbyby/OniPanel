@@ -1,4 +1,3 @@
-import { Card, CardHeader, CardPreview, Text } from '@fluentui/react-components'
 import './SystemInfoPanel.css'
 
 export default function SystemInfoPanel({ systemInfo }) {
@@ -13,9 +12,12 @@ export default function SystemInfoPanel({ systemInfo }) {
   }
 
   return (
-    <Card className="system-info-panel">
-      <CardHeader header={<Text weight="semibold">系统信息</Text>} />
-      <CardPreview style={{ padding: '16px' }}>
+    <div className="system-info-panel">
+      <div className="system-info-header">
+        <span className="info-icon">🖥️</span>
+        <h3>系统信息</h3>
+      </div>
+      <div className="system-info-body">
         <div className="system-info-grid">
           <div className="info-row">
             <span className="label">操作系统</span>
@@ -54,7 +56,7 @@ export default function SystemInfoPanel({ systemInfo }) {
             <span className="value">{systemInfo.os.release}</span>
           </div>
         </div>
-      </CardPreview>
-    </Card>
+      </div>
+    </div>
   )
 }

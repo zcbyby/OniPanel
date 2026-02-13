@@ -2,24 +2,63 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
+  padding: 16px;
+  background-color: #f5f5f5;
+  min-height: 100vh;
 }
 
 .processes-card {
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
   display: flex;
   flex-direction: column;
 }
 
+.processes-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.processes-header h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.header-icon {
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+}
+
 .processes-toolbar {
   padding: 12px 16px;
-  border-bottom: 1px solid #e1dfdd;
+  border-bottom: 1px solid #e0e0e0;
 }
 
 .search-box {
   width: 100%;
   max-width: 400px;
+  padding: 8px 12px;
+  border: 1px solid #c8c8c8;
+  border-radius: 4px;
+  font-size: 13px;
+  font-family: inherit;
+  background-color: #fff;
+}
+
+.search-box:focus {
+  outline: none;
+  border-color: #0078d4;
+  box-shadow: 0 0 0 2px rgba(0, 120, 212, 0.1);
 }
 
 .table-wrapper {
@@ -38,8 +77,8 @@
 .processes-table thead {
   position: sticky;
   top: 0;
-  background: #f3f2f1;
-  border-bottom: 1px solid #e1dfdd;
+  background: #f5f5f5;
+  border-bottom: 1px solid #e0e0e0;
   z-index: 10;
 }
 
@@ -48,11 +87,32 @@
   text-align: left;
   font-weight: 600;
   color: #333;
-  border-right: 1px solid #e1dfdd;
+  border-right: 1px solid #e0e0e0;
 }
 
 .processes-table th:last-child {
   border-right: none;
+}
+
+.sort-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  font: inherit;
+  font-weight: 600;
+  text-align: left;
+  width: 100%;
+  color: #333;
+}
+
+.sort-button:hover {
+  color: #0078d4;
+}
+
+.sort-indicator {
+  font-size: 11px;
+  margin-left: 2px;
 }
 
 .processes-table tbody tr:hover {
@@ -61,8 +121,8 @@
 
 .processes-table td {
   padding: 10px 12px;
-  border-right: 1px solid #e1dfdd;
-  border-bottom: 1px solid #e1dfdd;
+  border-right: 1px solid #e0e0e0;
+  border-bottom: 1px solid #e0e0e0;
   vertical-align: middle;
 }
 
@@ -102,7 +162,7 @@
   display: inline-block;
   width: 60px;
   height: 16px;
-  background: #e1dfdd;
+  background: #e0e0e0;
   border-radius: 2px;
   overflow: hidden;
   margin-right: 8px;
@@ -143,6 +203,10 @@
   justify-content: center;
   padding: 48px 16px;
   color: #999;
+}
+
+.empty-state p {
+  margin: 0;
 }
 
 @media (max-width: 1024px) {
