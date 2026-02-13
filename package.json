@@ -1,5 +1,5 @@
 {
-  "name": "okpanel",
+  "name": "onipanel",
   "version": "1.0.0",
   "description": "A server status monitoring dashboard with Linux system information",
   "main": "server/index.js",

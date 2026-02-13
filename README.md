@@ -1,6 +1,6 @@
-# OKPanel - 服务器状态监控面板
+# OniPanel - 服务器状态监控面板
 
-一个基于 Node.js + React + Windows UI 的实时 Linux 服务器监控仪表板。采用 Windows 11 风格的原生 UI 设计，可实时展示 Linux 服务器的各种运行信息。
+一个基于 Node.js + React 的实时 Linux 服务器监控仪表板，可实时展示 Linux 服务器的各种运行信息。
 
 ### 权限问题
 某些系统信息需要足够的权限才能访问，如需获取完整信息，可能需要以 root 权限运行。
@@ -28,7 +28,7 @@ password: '新哈希值'
 ## 项目结构
 
 ```
-okpanel/
+onipanel/
 ├── server/                          # Node.js Express 后端
 │   └── index.js                    # 服务器和 API 路由（7个端点）
 ├── web/                             # React 前端应用
@@ -148,7 +148,7 @@ npm start
 ```
 
 3. 访问应用：
-打开浏览器访问 `http://localhost:3000`
+打开浏览器访问 `http://localhost:1567`
 
 
 ## 许可证

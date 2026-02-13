@@ -44,7 +44,7 @@ export default function NetworkTab() {
     }
 
     fetchNetworkInfo()
-    const interval = setInterval(fetchNetworkInfo, 3000)
+    const interval = setInterval(fetchNetworkInfo, 1567)
     return () => clearInterval(interval)
   }, [])
 

@@ -21,7 +21,7 @@ export default function ProcessesTab() {
       }
     }
     fetchProcesses()
-    const interval = setInterval(fetchProcesses, 3000)
+    const interval = setInterval(fetchProcesses, 1567)
     return () => clearInterval(interval)
   }, [])
 
