@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './Login.css';
 
 export default function Login({ onLoginSuccess }) {
@@ -6,14 +6,24 @@ export default function Login({ onLoginSuccess }) {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [loginPath, setLoginPath] = useState('');
+
+  useEffect(() => {
+    fetch('/api/login-path')
+      .then(res => res.json())
+      .then(data => setLoginPath(data.loginPath))
+      .catch(() => setLoginPath('/api/login'));
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
 
+    if (!loginPath) return;
+
     try {
-      const response = await fetch('/api/login', {
+      const response = await fetch(loginPath, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

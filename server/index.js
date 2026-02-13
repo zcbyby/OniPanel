@@ -7,9 +7,24 @@ const fs = require('fs');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
+const crypto = require('crypto');
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
+
+const defaultLoginPath = '/' + crypto.randomBytes(8).toString('hex');
+const LOGIN_PATH = process.env.LOGIN_PATH || defaultLoginPath;
+const LOGIN_PATH_FILE = path.join(__dirname, '.login-path');
+
+let currentLoginPath = LOGIN_PATH;
+if (fs.existsSync(LOGIN_PATH_FILE)) {
+  currentLoginPath = fs.readFileSync(LOGIN_PATH_FILE, 'utf8').trim();
+} else {
+  fs.writeFileSync(LOGIN_PATH_FILE, currentLoginPath);
+}
+
+console.log(`\n🔐 登录路径: http://localhost:${PORT}${currentLoginPath}\n`);
 
 // Middleware
 app.use(cors());
@@ -49,8 +64,21 @@ let lastNetStats = null;
 let lastNetStatsTime = 0;
 const NET_STATS_CACHE_TIME = 1000; // 1秒缓存
 
+// 获取登录路径（前端使用）
+app.get('/api/login-path', (req, res) => {
+  res.json({ loginPath: currentLoginPath });
+});
+
+// 重置登录路径（需要认证）
+app.post('/api/reset-login-path', authenticateToken, (req, res) => {
+  const newPath = '/' + crypto.randomBytes(8).toString('hex');
+  fs.writeFileSync(LOGIN_PATH_FILE, newPath);
+  console.log(`\n🔐 登录路径已重置: http://localhost:${PORT}${newPath}\n`);
+  res.json({ loginPath: newPath, message: '请使用新路径登录' });
+});
+
 // 登录端点
-app.post('/api/login', async (req, res) => {
+app.post(currentLoginPath, async (req, res) => {
   try {
     const { username, password } = req.body;
 

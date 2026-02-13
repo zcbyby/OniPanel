@@ -79,6 +79,8 @@ okpanel/
 
 | 端点 | 方法 | 描述 |
 |------|------|------|
+| `/api/login-path` | GET | 获取登录路径 |
+| `/api/reset-login-path` | POST | 重置登录路径（需认证） |
 | `/api/health` | GET | 健康检查 |
 | `/api/system-info` | GET | 系统基本信息（CPU、内存、OS） |
 | `/api/cpu-load` | GET | CPU 使用率详情（总体和分核心） |
@@ -178,6 +180,8 @@ npm start
 ## 修改密码
 
 默认账户：`admin / admin`
+
+登录路径随机生成，每次启动时显示在终端中。
 
 1. 生成新密码哈希：
 ```bash
