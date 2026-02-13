@@ -25,47 +25,47 @@ export default function Login({ onLoginSuccess }) {
     try {
       const response = await fetch(loginPath, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        setError(data.error || '登录失败');
+        setError(data.error || 'Login failed');
+        setLoading(false);
         return;
       }
 
-      // 存储 token 到 localStorage
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
-
-      // 调用成功回调
       onLoginSuccess(data.user);
     } catch (err) {
-      setError('网络错误: ' + err.message);
+      setError('Network error');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="login-container">
-      <div className="login-card">
-        <div className="login-header">
-          <h1>OKPanel</h1>
-          <p>服务器状态监控面板</p>
+    <div className="win-login-page">
+      <div className="win-login-card">
+        <div className="win-login-header">
+          <div className="win-logo">
+            <svg viewBox="0 0 24 24" width="44" height="44" fill="currentColor">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+            </svg>
+          </div>
+          <h2 className="win-login-title">Sign in to OKPanel</h2>
+          <p className="win-login-subtitle">Monitor your Linux server in real-time</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="login-form">
-          <div className="form-group">
-            <label htmlFor="username">用户名</label>
+        <form onSubmit={handleSubmit} className="win-login-form">
+          <div className="win-input-group">
+            <label htmlFor="username">Username</label>
             <input
               id="username"
               type="text"
-              placeholder="输入用户名 (默认: admin)"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               disabled={loading}
@@ -73,12 +73,11 @@ export default function Login({ onLoginSuccess }) {
             />
           </div>
 
-          <div className="form-group">
-            <label htmlFor="password">密码</label>
+          <div className="win-input-group">
+            <label htmlFor="password">Password</label>
             <input
               id="password"
               type="password"
-              placeholder="输入密码 (默认: admin)"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               disabled={loading}
@@ -86,19 +85,15 @@ export default function Login({ onLoginSuccess }) {
             />
           </div>
 
-          {error && <div className="error-message">❌ {error}</div>}
+          {error && <div className="win-error">{error}</div>}
 
-          <div className="password-hint">
-            <small>💡 默认账户: admin / 密码: admin</small>
-          </div>
-
-          <button type="submit" disabled={loading} className="login-button">
-            {loading ? '登录中...' : '登成'}
+          <button type="submit" disabled={loading} className="win-login-btn">
+            {loading ? 'Signing in...' : 'Sign in'}
           </button>
         </form>
 
-        <div className="login-footer">
-          <p>© 2026 OKPanel - 实时 Linux 服务器监控面板</p>
+        <div className="win-login-footer">
+          <p>Default: admin / admin</p>
         </div>
       </div>
     </div>

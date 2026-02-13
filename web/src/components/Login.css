@@ -1,204 +1,137 @@
-.login-container {
+.win-login-page {
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #0078d4 0%, #107c10 100%);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+  background: linear-gradient(135deg, #0078d4 0%, #106ebe 100%);
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  padding: 20px;
 }
 
-.login-card {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+.win-login-card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
   width: 100%;
-  max-width: 380px;
-  padding: 40px 30px;
-  animation: slideIn 0.3s ease-out;
+  max-width: 320px;
+  padding: 32px;
 }
 
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.login-header {
+.win-login-header {
   text-align: center;
-  margin-bottom: 30px;
-  border-bottom: 2px solid #e0e0e0;
-  padding-bottom: 20px;
+  margin-bottom: 24px;
 }
 
-.login-header h1 {
-  margin: 0 0 8px 0;
-  font-size: 32px;
-  font-weight: 600;
+.win-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  margin-bottom: 14px;
   color: #0078d4;
-  letter-spacing: -0.5px;
 }
 
-.login-header p {
+.win-login-title {
+  margin: 0 0 6px 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.win-login-subtitle {
   margin: 0;
   font-size: 13px;
   color: #666;
-  font-weight: 500;
 }
 
-.login-form {
+.win-login-form {
   margin: 20px 0;
 }
 
-.form-group {
-  margin-bottom: 18px;
+.win-input-group {
+  margin-bottom: 16px;
 }
 
-.form-group label {
+.win-input-group label {
   display: block;
   margin-bottom: 6px;
-  font-size: 12px;
-  font-weight: 600;
-  color: #333;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.form-group input {
-  width: 100%;
-  padding: 11px 12px;
-  font-size: 14px;
-  border: 1px solid #d0d0d0;
-  border-radius: 6px;
-  background: white;
-  transition: all 0.2s ease;
-  box-sizing: border-box;
-  color: #333;
-}
-
-.form-group input:focus {
-  outline: none;
-  border-color: #0078d4;
-  box-shadow: 0 0 0 3px rgba(0, 120, 212, 0.1);
-  background: #f9fbfd;
-}
-
-.form-group input::placeholder {
-  color: #999;
-}
-
-.form-group input:disabled {
-  background: #f5f5f5;
-  color: #999;
-  cursor: not-allowed;
-}
-
-.error-message {
-  padding: 10px 12px;
-  margin-bottom: 15px;
-  border-radius: 6px;
-  background: #fed2d2;
-  border-left: 4px solid #d13438;
   font-size: 13px;
-  color: #d13438;
-  animation: shake 0.3s ease;
+  font-weight: 600;
+  color: #333;
 }
 
-@keyframes shake {
-  0%, 100% {
-    transform: translateX(0);
-  }
-  25% {
-    transform: translateX(-5px);
-  }
-  75% {
-    transform: translateX(5px);
-  }
-}
-
-.password-hint {
-  margin-bottom: 20px;
-  padding: 10px 12px;
-  background: #faf8f3;
-  border-left: 4px solid #ffc107;
-  border-radius: 4px;
-  font-size: 12px;
-  color: #666;
-  line-height: 1.5;
-}
-
-.password-hint small {
-  display: block;
-}
-
-.login-button {
+.win-input-group input {
   width: 100%;
-  padding: 12px;
+  padding: 10px 12px;
+  font-size: 14px;
+  border: 1px solid #a9a9a9;
+  border-radius: 4px;
+  background: #fff;
+  color: #1a1a1a;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.win-input-group input:focus {
+  border-color: #0078d4;
+  box-shadow: 0 0 0 1px #0078d4;
+}
+
+.win-input-group input:disabled {
+  background: #f3f3f3;
+  color: #999;
+}
+
+.win-error {
+  padding: 10px 12px;
+  margin-bottom: 16px;
+  border-radius: 4px;
+  background: #fde7e9;
+  border-left: 3px solid #a80000;
+  font-size: 13px;
+  color: #a80000;
+  text-align: center;
+}
+
+.win-login-btn {
+  width: 100%;
+  padding: 10px 20px;
   font-size: 14px;
   font-weight: 600;
-  color: white;
+  color: #fff;
   background: #0078d4;
   border: none;
-  border-radius: 6px;
+  border-radius: 4px;
   cursor: pointer;
-  transition: all 0.2s ease;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  transition: background 0.15s ease;
 }
 
-.login-button:hover:not(:disabled) {
-  background: #006cbe;
-  box-shadow: 0 3px 12px rgba(0, 120, 212, 0.3);
-  transform: translateY(-2px);
+.win-login-btn:hover:not(:disabled) {
+  background: #006cbd;
 }
 
-.login-button:active:not(:disabled) {
-  transform: translateY(0);
-  box-shadow: 0 1px 6px rgba(0, 120, 212, 0.2);
-}
-
-.login-button:disabled {
-  background: #b4b4b4;
+.win-login-btn:disabled {
+  background: #cce4f7;
+  color: #99c5eb;
   cursor: not-allowed;
-  opacity: 0.7;
 }
 
-.login-footer {
+.win-login-footer {
   text-align: center;
-  margin-top: 25px;
-  padding-top: 20px;
-  border-top: 1px solid #e0e0e0;
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid #e5e5e5;
 }
 
-.login-footer p {
+.win-login-footer p {
   margin: 0;
-  font-size: 11px;
+  font-size: 12px;
   color: #999;
 }
 
-/* 响应式设计 */
-@media (max-width: 480px) {
-  .login-container {
-    padding: 20px;
-  }
-
-  .login-card {
-    padding: 30px 20px;
-  }
-
-  .login-header h1 {
-    font-size: 24px;
-  }
-
-  .login-header p {
-    font-size: 12px;
-  }
-
-  .form-group input {
-    font-size: 16px; /* 防止 iOS 自动缩放 */
+@media (max-width: 360px) {
+  .win-login-card {
+    padding: 24px 20px;
   }
 }

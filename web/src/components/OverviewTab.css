@@ -1,140 +1,128 @@
-.overview-container {
+.win-overview {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  padding: 16px;
-  background-color: #f5f5f5;
+  gap: 16px;
+  padding: 0;
 }
 
-.loading {
+.win-loading {
   text-align: center;
   padding: 40px;
-  font-size: 16px;
+  font-size: 14px;
   color: #666;
 }
 
-/* 状态卡片行 */
-.status-cards {
+.win-grid-2 {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 16px;
 }
 
-/* Windows UI 卡片样式 */
-.win-card {
-  background-color: #fff;
-  border: 1px solid #e0e0e0;
+.app-card {
+  background: #fff;
+  border: 1px solid #e5e5e5;
   border-radius: 4px;
   overflow: hidden;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
-  transition: box-shadow 0.2s ease;
 }
 
-.win-card:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-}
-
-.win-card-header {
+.app-card-header {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 16px;
-  background-color: #f5f5f5;
-  border-bottom: 1px solid #e0e0e0;
+  gap: 10px;
+  padding: 12px 16px;
+  background: #f9f9f9;
+  border-bottom: 1px solid #e5e5e5;
 }
 
-.win-card-header h3 {
-  margin: 0;
-  font-size: 14px;
-  font-weight: 600;
-  color: #333;
-}
-
-.card-icon {
-  font-size: 20px;
+.win-card-icon {
   display: flex;
   align-items: center;
-}
-
-.win-card-content {
-  padding: 16px;
-}
-
-/* 进度条样式 */
-.progress-bar {
-  height: 6px;
-  background-color: #e0e0e0;
-  border-radius: 3px;
-  overflow: hidden;
-  margin: 8px 0;
-}
-
-.progress-bar.small {
-  height: 4px;
-  margin: 4px 0;
-}
-
-.progress-fill {
-  height: 100%;
-  background-color: #107c10;
-  border-radius: 2px;
-  transition: width 0.3s ease;
-}
-
-/* 指标样式 */
-.metric {
-  margin-bottom: 16px;
-}
-
-.metric:last-child {
-  margin-bottom: 0;
-}
-
-.metric-label {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 8px;
-  font-size: 12px;
-  color: #666;
-}
-
-.metric-value {
-  font-weight: 600;
-  font-size: 14px;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
   color: #0078d4;
 }
 
-.usage-percent {
-  font-size: 11px;
-  color: #999;
-  margin-top: 4px;
-  text-align: right;
-}
-
-/* CPU 核心 */
-.cpu-cores {
-  margin-top: 12px;
-  padding-top: 12px;
-  border-top: 1px solid #e0e0e0;
-}
-
-.cpu-cores h4 {
-  margin: 0 0 8px 0;
-  font-size: 12px;
+.win-card-title {
+  margin: 0;
+  font-size: 13px;
   font-weight: 600;
+  color: #1a1a1a;
+}
+
+.app-card-body {
+  padding: 16px;
+}
+
+.win-metric {
+  margin-bottom: 12px;
+}
+
+.win-metric-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+  font-size: 12px;
   color: #666;
 }
 
-.core-item {
+.win-metric-value {
+  font-weight: 600;
+  font-size: 14px;
+  color: #0078d4;
+  font-family: 'Consolas', monospace;
+}
+
+.win-progress {
+  height: 6px;
+  background: #e5e5e5;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.win-progress-bar {
+  height: 100%;
+  background: #107c10;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.win-progress-sm {
+  height: 4px;
+  margin-top: 4px;
+}
+
+.win-usage-text {
+  font-size: 11px;
+  color: #999;
+  text-align: right;
+  margin-top: 4px;
+}
+
+.win-cores {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #e5e5e5;
+}
+
+.win-cores h4 {
+  margin: 0 0 8px 0;
+  font-size: 11px;
+  font-weight: 600;
+  color: #666;
+  text-transform: uppercase;
+}
+
+.win-core {
   margin-bottom: 8px;
 }
 
-.core-item:last-child {
+.win-core:last-child {
   margin-bottom: 0;
 }
 
-.core-label {
+.win-core-header {
   display: flex;
   justify-content: space-between;
   font-size: 11px;
@@ -142,228 +130,150 @@
   margin-bottom: 4px;
 }
 
-.core-label span:last-child {
-  font-weight: 500;
-  color: #333;
-}
-
-/* 进程统计 */
-.process-stats {
+.win-stats-row {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+  gap: 8px;
 }
 
-.stat-item {
-  padding: 12px;
-  background-color: #f5f5f5;
+.win-stat-box {
+  padding: 10px 8px;
+  background: #f3f3f3;
   border-radius: 4px;
   text-align: center;
 }
 
-.stat-label {
-  font-size: 11px;
+.win-stat-label {
+  font-size: 10px;
   color: #999;
-  margin-bottom: 8px;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  margin-bottom: 4px;
 }
 
-.stat-value {
-  font-size: 24px;
+.win-stat-value {
+  font-size: 18px;
   font-weight: 600;
-  color: #333;
+  color: #1a1a1a;
 }
 
-/* 系统负载 */
-.load-stats {
+.win-load-row {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
+  gap: 8px;
   margin-bottom: 12px;
 }
 
-.load-item {
+.win-load-item {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 8px;
-  background-color: #f5f5f5;
+  background: #f3f3f3;
   border-radius: 4px;
 }
 
-.load-label {
-  font-size: 11px;
+.win-load-label {
+  font-size: 10px;
   color: #999;
-  margin-bottom: 4px;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
 }
 
-.load-value {
-  font-size: 18px;
+.win-load-value {
+  font-size: 16px;
   font-weight: 600;
   color: #0078d4;
-  font-family: 'Courier New', monospace;
+  font-family: 'Consolas', monospace;
 }
 
-.uptime-info {
+.win-uptime {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  padding: 8px 0;
-  border-top: 1px solid #e0e0e0;
+  padding-top: 10px;
+  border-top: 1px solid #e5e5e5;
+  font-size: 12px;
 }
 
-.uptime-label {
-  font-size: 12px;
+.win-uptime span:first-child {
   color: #666;
-  font-weight: 500;
 }
 
-.uptime-value {
-  font-size: 14px;
-  color: #333;
+.win-uptime span:last-child {
   font-weight: 600;
-  font-family: 'Courier New', monospace;
+  color: #1a1a1a;
 }
 
-/* 内存详情 */
-.memory-detail {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.mem-row {
-  display: flex;
-  justify-content: space-between;
-  padding: 8px 0;
-  border-bottom: 1px solid #e0e0e0;
-}
-
-.mem-row:last-of-type {
-  border-bottom: none;
-}
-
-.mem-label {
-  font-size: 12px;
-  color: #666;
-  font-weight: 500;
-}
-
-.mem-value {
-  font-size: 12px;
-  color: #333;
-  font-weight: 600;
-  font-family: 'Courier New', monospace;
-}
-
-/* 磁盘 I/O */
-.io-stats {
+.win-io-row {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 12px;
 }
 
-.io-item {
+.win-io-item {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 12px;
-  background-color: #f5f5f5;
+  background: #f3f3f3;
   border-radius: 4px;
 }
 
-.io-label {
-  font-size: 11px;
+.win-io-label {
+  font-size: 10px;
   color: #999;
-  margin-bottom: 4px;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  margin-bottom: 4px;
 }
 
-.io-value {
-  font-size: 16px;
+.win-io-value {
+  font-size: 14px;
   font-weight: 600;
-  color: #333;
-  font-family: 'Courier New', monospace;
+  color: #1a1a1a;
+  font-family: 'Consolas', monospace;
 }
 
-/* 网络连接 */
-.conn-stats {
+.win-conn-row {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
+  gap: 8px;
 }
 
-.conn-item {
+.win-conn-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 12px;
-  background-color: #f5f5f5;
+  padding: 10px 6px;
+  background: #f3f3f3;
   border-radius: 4px;
 }
 
-.conn-label {
-  font-size: 11px;
+.win-conn-label {
+  font-size: 10px;
   color: #999;
-  margin-bottom: 4px;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  margin-bottom: 4px;
 }
 
-.conn-value {
-  font-size: 20px;
+.win-conn-value {
+  font-size: 16px;
   font-weight: 600;
-  color: #333;
-  font-family: 'Courier New', monospace;
+  color: #1a1a1a;
 }
 
-/* 图表卡片 */
-.chart-card {
-  grid-column: 1 / -1;
+.win-chart-card {
+  margin-top: 0;
 }
 
-.chart-card .win-card-content {
-  padding: 0;
-}
-
-/* 响应式布局 */
 @media (max-width: 768px) {
-  .overview-container {
-    padding: 12px;
-    gap: 16px;
-  }
-
-  .status-cards {
+  .win-grid-2 {
     grid-template-columns: 1fr;
   }
 
-  .process-stats {
+  .win-load-row,
+  .win-conn-row {
     grid-template-columns: 1fr;
   }
 
-  .load-stats {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  .io-stats {
-    grid-template-columns: 1fr;
-  }
-
-  .conn-stats {
-    grid-template-columns: 1fr;
-  }
-
-  .metric-label {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .metric-value {
-    align-self: flex-end;
-    margin-top: -18px;
+  .win-stats-row {
+    grid-template-columns: repeat(2, 1fr);
   }
 }

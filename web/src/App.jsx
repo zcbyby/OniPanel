@@ -12,8 +12,15 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [loginPath, setLoginPath] = useState('')
 
-  // 页面加载时检查是否已登录
+  useEffect(() => {
+    fetch('/api/login-path')
+      .then(res => res.json())
+      .then(data => setLoginPath(data.loginPath))
+      .catch(() => {})
+  }, [])
+
   useEffect(() => {
     const token = localStorage.getItem('token')
     const userData = localStorage.getItem('user')
@@ -28,6 +35,7 @@ function App() {
   const handleLoginSuccess = (userData) => {
     setUser(userData)
     setIsLoggedIn(true)
+    window.location.href = '/'
   }
 
   const handleLogout = () => {
@@ -37,29 +45,27 @@ function App() {
     setUser(null)
   }
 
-  if (loading) {
+  if (loading || !loginPath) {
     return (
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        minHeight: '100vh',
-        background: '#f5f5f5',
-        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'
-      }}>
-        <div style={{ textAlign: 'center' }}>
-          <div style={{
-            fontSize: '32px',
-            marginBottom: '16px',
-            animation: 'spin 1s linear infinite'
-          }}>⏳</div>
-          <p style={{ color: '#666' }}>加载中...</p>
-          <style>{`
-            @keyframes spin {
-              from { transform: rotate(0deg); }
-              to { transform: rotate(360deg); }
-            }
-          `}</style>
+      <div className="win-page-container">
+        <div className="win-loader"></div>
+      </div>
+    )
+  }
+
+  const currentPath = window.location.pathname
+  
+  if (!isLoggedIn && currentPath !== loginPath) {
+    return (
+      <div className="win-page-container">
+        <div className="win-forbidden">
+          <div className="win-forbidden-icon">
+            <svg viewBox="0 24" width="0 24 56" height="56" fill="currentColor">
+              <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
+            </svg>
+          </div>
+          <h2>Access Restricted</h2>
+          <p>Please sign in to access this page</p>
         </div>
       </div>
     )
@@ -70,22 +76,22 @@ function App() {
   }
 
   const tabs = [
-    { id: 'overview', label: '📊 总览' },
-    { id: 'processes', label: '⚙️ 进程' },
-    { id: 'disk', label: '💾 存储' },
-    { id: 'network', label: '🌐 网络' },
+    { id: 'overview', label: 'Overview' },
+    { id: 'processes', label: 'Processes' },
+    { id: 'disk', label: 'Storage' },
+    { id: 'network', label: 'Network' },
   ]
 
   return (
     <div className="win-app">
       <Header onLogout={handleLogout} user={user} />
       
-      <div className="win-tab-container">
-        <div className="win-tab-header">
+      <div className="win-nav">
+        <div className="win-nav-bar">
           {tabs.map(tab => (
             <button
               key={tab.id}
-              className={`win-tab ${selectedTab === tab.id ? 'selected' : ''}`}
+              className={`win-nav-item ${selectedTab === tab.id ? 'active' : ''}`}
               onClick={() => setSelectedTab(tab.id)}
             >
               {tab.label}

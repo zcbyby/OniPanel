@@ -8,26 +8,27 @@ export default function ProcessesTab() {
   const [searchText, setSearchText] = useState('')
   const [sortBy, setSortBy] = useState('mem')
   const [sortOrder, setSortOrder] = useState('desc')
+  const [ready, setReady] = useState(false)
 
   useEffect(() => {
     const fetchProcesses = async () => {
       try {
         const data = await apiCallJSON('/api/processes')
         setProcesses(data.processes || [])
+        setReady(true)
       } catch (error) {
         console.error('Failed to fetch processes:', error)
       }
     }
-
     fetchProcesses()
     const interval = setInterval(fetchProcesses, 3000)
     return () => clearInterval(interval)
   }, [])
 
   useEffect(() => {
-    let filtered = processes.filter(p =>
-      p.name.toLowerCase().includes(searchText.toLowerCase()) ||
-      p.pid.toString().includes(searchText)
+    let filtered = (processes || []).filter(p =>
+      (p.name || '').toLowerCase().includes(searchText.toLowerCase()) ||
+      String(p.pid || '').includes(searchText)
     )
 
     filtered.sort((a, b) => {
@@ -49,95 +50,94 @@ export default function ProcessesTab() {
   }
 
   const formatMemory = (bytes) => {
-    if (bytes < 1024) return bytes + ' B'
-    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + ' KB'
-    if (bytes < 1024 * 1024 * 1024) return (bytes / 1024 / 1024).toFixed(2) + ' MB'
+    if (!bytes || bytes < 1024) return (bytes || 0) + ' B'
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB'
+    if (bytes < 1024 * 1024 * 1024) return (bytes / 1024 / 1024).toFixed(1) + ' MB'
     return (bytes / 1024 / 1024 / 1024).toFixed(2) + ' GB'
   }
 
   const SortIndicator = ({ column }) => {
     if (sortBy !== column) return null
-    return <span className="sort-indicator">{sortOrder === 'desc' ? ' ↓' : ' ↑'}</span>
+    return <span className="win-sort-indicator">{sortOrder === 'desc' ? ' ▼' : ' ▲'}</span>
+  }
+
+  if (!ready) {
+    return <div className="win-loading">Loading...</div>
   }
 
   return (
-    <div className="processes-container">
-      <div className="processes-card">
-        <div className="processes-header">
-          <span className="header-icon">🖱️</span>
-          <h3>进程列表 ({filteredProcesses.length})</h3>
+    <div className="win-processes">
+      <div className="app-card">
+        <div className="app-card-header">
+          <div className="win-card-icon">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+              <path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/>
+            </svg>
+          </div>
+          <h3 className="win-card-title">Processes ({filteredProcesses.length})</h3>
         </div>
 
-        <div className="processes-toolbar">
+        <div className="win-toolbar">
           <input
             type="search"
-            placeholder="搜索进程名称或 PID..."
+            placeholder="Search by name or PID..."
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
-            className="search-box"
+            className="app-input-text"
+            style={{ padding: '8px 12px' }}
           />
         </div>
 
-        <div className="table-wrapper">
-          <table className="processes-table">
+        <div className="win-table-wrapper">
+          <table className="win-table">
             <thead>
               <tr>
                 <th style={{ width: '80px' }}>
-                  <button className="sort-button" onClick={() => handleSort('pid')}>
-                    PID
-                    <SortIndicator column="pid" />
+                  <button className="win-sort-btn" onClick={() => handleSort('pid')}>
+                    PID <SortIndicator column="pid" />
                   </button>
                 </th>
                 <th style={{ flex: 1 }}>
-                  <button className="sort-button" onClick={() => handleSort('name')}>
-                    进程名称
-                    <SortIndicator column="name" />
+                  <button className="win-sort-btn" onClick={() => handleSort('name')}>
+                    Name <SortIndicator column="name" />
                   </button>
                 </th>
                 <th style={{ width: '100px' }}>
-                  <button className="sort-button" onClick={() => handleSort('cpu')}>
-                    CPU %
-                    <SortIndicator column="cpu" />
-                  </button>
-                </th>
-                <th style={{ width: '120px' }}>
-                  <button className="sort-button" onClick={() => handleSort('mem')}>
-                    内存
-                    <SortIndicator column="mem" />
+                  <button className="win-sort-btn" onClick={() => handleSort('cpu')}>
+                    CPU % <SortIndicator column="cpu" />
                   </button>
                 </th>
                 <th style={{ width: '100px' }}>
-                  <button className="sort-button" onClick={() => handleSort('user')}>
-                    用户
-                    <SortIndicator column="user" />
+                  <button className="win-sort-btn" onClick={() => handleSort('mem')}>
+                    Memory <SortIndicator column="mem" />
+                  </button>
+                </th>
+                <th style={{ width: '100px' }}>
+                  <button className="win-sort-btn" onClick={() => handleSort('user')}>
+                    User <SortIndicator column="user" />
                   </button>
                 </th>
               </tr>
             </thead>
             <tbody>
               {filteredProcesses.map((process) => (
-                <tr key={process.pid} className="process-row">
-                  <td className="pid-cell">{process.pid}</td>
-                  <td className="name-cell">
-                    <div className="process-name">
-                      <span className="name">{process.name}</span>
-                    </div>
-                  </td>
-                  <td className="cpu-cell">
-                    <div className="metric-bar">
+                <tr key={process.pid} className="win-tr">
+                  <td className="win-td pid">{process.pid}</td>
+                  <td className="win-td name">{process.name || 'Unknown'}</td>
+                  <td className="win-td">
+                    <div className="win-metric-bar">
                       <div
-                        className="metric-fill cpu"
+                        className="win-metric-fill"
                         style={{
-                          width: `${Math.min(process.cpu, 100)}%`,
+                          width: `${Math.min(process.cpu || 0, 100)}%`,
+                          backgroundColor: (process.cpu || 0) > 80 ? '#d13438' : '#0078d4'
                         }}
                       ></div>
                     </div>
-                    <span className="metric-value">{process.cpu.toFixed(2)}%</span>
+                    <span className="win-metric-text">{((process.cpu || 0)).toFixed(1)}%</span>
                   </td>
-                  <td className="mem-cell">
-                    <span className="mem-value">{formatMemory(process.mem)}</span>
-                  </td>
-                  <td className="user-cell">{process.user}</td>
+                  <td className="win-td mem">{formatMemory(process.mem)}</td>
+                  <td className="win-td user">{process.user || 'N/A'}</td>
                 </tr>
               ))}
             </tbody>
@@ -145,8 +145,8 @@ export default function ProcessesTab() {
         </div>
 
         {filteredProcesses.length === 0 && (
-          <div className="empty-state">
-            <p>没有找到匹配的进程</p>
+          <div className="win-empty">
+            <p>No processes found</p>
           </div>
         )}
       </div>

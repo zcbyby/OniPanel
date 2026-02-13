@@ -1,41 +1,100 @@
+* {
+  box-sizing: border-box;
+}
+
 .win-app {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background: #f5f5f5;
+  background: #f3f3f3;
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
-.win-tab-container {
-  background: white;
-  border-bottom: 1px solid #e0e0e0;
+.win-page-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: #f3f3f3;
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
-.win-tab-header {
+.win-loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+}
+
+.app-loader-busy {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #d1d1d1;
+  border-top-color: #0078d4;
+  border-radius: 50%;
+  animation: winSpin 0.8s linear infinite;
+}
+
+@keyframes winSpin {
+  to { transform: rotate(360deg); }
+}
+
+.win-forbidden {
+  text-align: center;
+  padding: 40px;
+}
+
+.win-forbidden-icon {
+  color: #666;
+  margin-bottom: 16px;
+}
+
+.win-forbidden h2 {
+  margin: 0 0 8px 0;
+  font-size: 22px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.win-forbidden p {
+  margin: 0;
+  font-size: 14px;
+  color: #666;
+}
+
+.win-nav {
+  background: #ffffff;
+  border-bottom: 1px solid #e5e5e5;
+  padding: 0 16px;
+}
+
+.win-nav-bar {
   display: flex;
   gap: 0;
-  padding: 0;
   margin: 0;
+  padding: 0;
 }
 
-.win-tab {
+.win-nav-item {
   border: none;
   background: transparent;
-  padding: 12px 24px;
+  padding: 12px 20px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 13px;
+  font-weight: 400;
   font-family: 'Segoe UI', sans-serif;
-  color: #333;
-  border-bottom: 3px solid transparent;
+  color: #666;
+  border-bottom: 2px solid transparent;
   margin-bottom: -1px;
-  transition: all 0.2s ease;
-  white-space: nowrap;
+  transition: all 0.15s ease;
 }
 
-.win-tab:hover {
-  background: #f0f0f0;
+.win-nav-item:hover {
+  color: #1a1a1a;
+  background: rgba(0, 0, 0, 0.04);
 }
 
-.win-tab.selected {
+.win-nav-item.active {
   color: #0078d4;
   border-bottom-color: #0078d4;
 }
@@ -43,14 +102,18 @@
 .win-content {
   flex: 1;
   overflow: auto;
-  padding: 20px;
-  background: #f5f5f5;
+  padding: 16px;
+  background: #f3f3f3;
 }
 
 @media (max-width: 768px) {
-  .win-tab {
-    padding: 10px 16px;
-    font-size: 13px;
+  .win-nav {
+    padding: 0 8px;
+  }
+
+  .win-nav-item {
+    padding: 10px 14px;
+    font-size: 12px;
   }
 
   .win-content {

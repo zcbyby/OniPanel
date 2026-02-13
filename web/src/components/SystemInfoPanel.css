@@ -1,84 +1,54 @@
-.system-info-panel {
-  background-color: #fff;
-  border: 1px solid #e0e0e0;
-  border-radius: 4px;
-  overflow: hidden;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
-  margin-bottom: 8px;
+.win-system-info {
+  margin-bottom: 0;
 }
 
-.system-info-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 16px;
-  background-color: #f5f5f5;
-  border-bottom: 1px solid #e0e0e0;
-}
-
-.system-info-header h3 {
-  margin: 0;
-  font-size: 14px;
-  font-weight: 600;
-  color: #333;
-}
-
-.info-icon {
-  font-size: 20px;
-  display: flex;
-  align-items: center;
-}
-
-.system-info-body {
-  padding: 16px;
-}
-
-.system-info-grid {
+.win-info-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 8px;
 }
 
-.info-row {
+.win-info-row {
   display: flex;
   justify-content: space-between;
   padding: 8px 0;
-  border-bottom: 1px solid #e0e0e0;
-  font-size: 13px;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 12px;
 }
 
-.info-row:last-child {
+.win-info-row:last-child {
   border-bottom: none;
 }
 
-.info-row .label {
+.win-info-label {
   font-weight: 500;
   color: #666;
-  min-width: 100px;
+  min-width: 80px;
 }
 
-.info-row .value {
-  color: #333;
+.win-info-value {
+  color: #1a1a1a;
   word-break: break-all;
   text-align: right;
   flex: 1;
   margin-left: 12px;
+  font-family: 'Consolas', monospace;
 }
 
 @media (max-width: 768px) {
-  .system-info-grid {
+  .win-info-grid {
     grid-template-columns: 1fr;
   }
 
-  .info-row {
+  .win-info-row {
     flex-direction: column;
   }
 
-  .info-row .label {
-    margin-bottom: 4px;
+  .win-info-label {
+    margin-bottom: 2px;
   }
 
-  .info-row .value {
+  .win-info-value {
     text-align: left;
   }
 }

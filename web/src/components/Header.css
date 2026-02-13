@@ -1,192 +1,167 @@
 .win-header {
-  background: linear-gradient(135deg, #0078d4 0%, #1090d8 100%);
-  color: white;
-  padding: 16px 24px;
+  background: #ffffff;
+  color: #1a1a1a;
+  padding: 10px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 20px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  gap: 16px;
+  border-bottom: 1px solid #e5e5e5;
   flex-wrap: wrap;
 }
 
-.header-left {
+.win-header-left {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.win-logo {
+  display: flex;
+  align-items: center;
   justify-content: center;
-  min-width: 200px;
+  width: 30px;
+  height: 30px;
+  color: #0078d4;
+  background: #eff6fc;
+  border-radius: 4px;
 }
 
-.header-left h1 {
+.win-title {
   margin: 0;
-  font-size: 24px;
+  font-size: 16px;
   font-weight: 600;
-  letter-spacing: -0.5px;
+  color: #1a1a1a;
 }
 
-.header-left p {
-  margin: 4px 0 0 0;
-  font-size: 13px;
-  opacity: 0.9;
-}
-
-.header-stats {
+.win-header-stats {
   display: flex;
   gap: 0;
   align-items: center;
-  background: rgba(255, 255, 255, 0.15);
+  background: #f3f3f3;
   border-radius: 4px;
-  padding: 0;
+  padding: 2px;
   flex: 1;
   justify-content: center;
-  min-width: 300px;
+  min-width: 260px;
+  max-width: 420px;
 }
 
-.stat-item {
+.win-stat {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 8px 12px;
-  min-width: 70px;
+  padding: 4px 10px;
+  min-width: 50px;
   text-align: center;
 }
 
-.stat-label {
-  font-size: 11px;
-  opacity: 0.8;
-  margin-bottom: 2px;
+.win-stat-label {
+  font-size: 10px;
+  color: #666;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.3px;
 }
 
-.stat-value {
-  font-size: 13px;
+.win-stat-value {
+  font-size: 12px;
   font-weight: 600;
-  font-family: 'Courier New', monospace;
+  font-family: 'Consolas', 'Courier New', monospace;
+  color: #1a1a1a;
 }
 
-.stat-divider {
+.win-stat-divider {
   width: 1px;
-  height: 24px;
-  background: rgba(255, 255, 255, 0.2);
+  height: 18px;
+  background: #d1d1d1;
 }
 
-.header-right {
+.win-header-right {
   display: flex;
-  gap: 16px;
+  gap: 10px;
   align-items: center;
 }
 
-.info-item {
+.win-info-item {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 5px;
   font-size: 12px;
+  color: #666;
   white-space: nowrap;
 }
 
-.info-item .icon {
-  font-size: 16px;
-}
-
-.divider {
-  width: 1px;
-  height: 20px;
-  background: rgba(255, 255, 255, 0.3);
-}
-
-.user-menu {
+.win-logout-btn {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 6px 12px;
-  background: rgba(255, 255, 255, 0.1);
+  gap: 5px;
+  background: #ffffff;
+  border: 1px solid #a9a9a9;
+  color: #1a1a1a;
+  padding: 4px 10px;
   border-radius: 4px;
-  font-size: 12px;
-}
-
-.user-icon {
-  font-size: 14px;
-}
-
-.username {
-  font-weight: 500;
-  white-space: nowrap;
-}
-
-.logout-btn {
-  background: rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color: white;
-  padding: 4px 8px;
-  border-radius: 3px;
   cursor: pointer;
   font-size: 12px;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
 }
 
-.logout-btn:hover {
-  background: rgba(255, 0, 0, 0.4);
-  border-color: rgba(255, 0, 0, 0.6);
+.win-logout-btn:hover {
+  background: #f3f3f3;
+  border-color: #666;
 }
 
-.logout-btn:active {
-  transform: scale(0.95);
+.win-logout-btn:active {
+  background: #e5e5e5;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 800px) {
   .win-header {
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
+    padding: 12px;
   }
 
-  .header-stats {
+  .win-header-stats {
     width: 100%;
     min-width: auto;
+    max-width: none;
+    order: 3;
   }
 
-  .header-left h1 {
-    font-size: 20px;
+  .win-title {
+    font-size: 14px;
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 500px) {
   .win-header {
-    padding: 12px 16px;
+    padding: 10px;
   }
 
-  .header-stats {
+  .win-header-stats {
     gap: 0;
-    padding: 0;
   }
 
-  .stat-item {
-    padding: 6px 8px;
-    min-width: 60px;
+  .win-stat {
+    padding: 4px 6px;
+    min-width: 40px;
   }
 
-  .stat-label {
-    font-size: 10px;
+  .win-stat-label {
+    font-size: 9px;
   }
 
-  .stat-value {
-    font-size: 12px;
+  .win-stat-value {
+    font-size: 11px;
   }
 
-  .header-right {
+  .win-header-right {
+    flex-wrap: wrap;
     justify-content: center;
-    gap: 12px;
+    gap: 6px;
   }
 
-  .header-left h1 {
-    font-size: 18px;
-  }
-
-  .header-left p {
-    font-size: 12px;
-  }
-
-  .info-item {
+  .win-info-item {
     font-size: 11px;
   }
 }
