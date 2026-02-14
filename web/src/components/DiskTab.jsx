@@ -1,6 +1,20 @@
 import { useState, useEffect } from 'react'
+import {
+  FluentProvider,
+  webLightTheme,
+  Card,
+  Text,
+  ProgressBar,
+  Body2,
+  Caption1,
+} from '@fluentui/react-components'
+import { Storage24Regular, LockClosed16Regular, LockOpen16Regular } from '@fluentui/react-icons'
 import { apiCallJSON } from '../utils/api'
-import './DiskTab.css'
+
+const ACCENT = '#0078d4'
+const GRAY = '#666666'
+const LIGHT_GRAY = '#f3f3f3'
+const BORDER = '#e5e5e5'
 
 export default function DiskTab() {
   const [diskInfo, setDiskInfo] = useState(null)
@@ -30,73 +44,119 @@ export default function DiskTab() {
   }
 
   if (!ready || !diskInfo) {
-    return <div className="win-loading">Loading...</div>
+    return (
+      <FluentProvider theme={webLightTheme}>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 200 }}>
+          <Text>Loading...</Text>
+        </div>
+      </FluentProvider>
+    )
   }
 
   return (
-    <div className="win-disk">
-      <div className="win-grid-3">
-        {(diskInfo.disks || []).map((disk, idx) => {
-          const size = disk.size || 1
-          const used = disk.used || 0
-          const usagePercent = (used / size) * 100
-          const statusColor = usagePercent > 90 ? '#d13438' : usagePercent > 70 ? '#ffc107' : '#107c10'
-
-          return (
-            <div key={idx} className="app-card">
-              <div className="app-card-header">
-                <div className="win-card-icon">
-                  <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-                    <path d="M20 6H12L10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-6 10H6v-2h8v2zm4-4H6v-2h12v2z"/>
-                  </svg>
-                </div>
-                <h3 className="win-card-title">{disk.mount || 'Unknown'}</h3>
-              </div>
-              <div className="app-card-body">
-                <div className="win-disk-fs">{disk.fs || 'N/A'}</div>
-                
-                <div className="win-metric">
-                  <div className="win-metric-header">
-                    <span>Used</span>
-                    <span className="win-metric-value">{formatBytes(used)} / {formatBytes(size)}</span>
-                  </div>
-                  <div className="win-progress">
-                    <div 
-                      className="win-progress-bar" 
-                      style={{
-                        width: `${usagePercent}%`,
-                        backgroundColor: statusColor
-                      }}
-                    ></div>
-                  </div>
-                  <div className="win-usage-text">
-                    {usagePercent.toFixed(1)}% used - {formatBytes(disk.available)} free
-                  </div>
-                </div>
-
-                <div className="win-disk-details">
-                  <div className="win-detail-row">
-                    <span className="win-detail-label">Type</span>
-                    <span className="win-detail-value">{disk.type || 'N/A'}</span>
-                  </div>
-                  <div className="win-detail-row">
-                    <span className="win-detail-label">Read/Write</span>
-                    <span className="win-detail-value" style={{ color: disk.rw ? '#107c10' : '#999' }}>
-                      {disk.rw ? 'Read/Write' : 'Read-only'}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )
-        })}
-      </div>
-
-      {(diskInfo.disks || []).length === 0 && (
-        <div className="win-empty">
-          <p>No disk information found</p>
+    <FluentProvider theme={webLightTheme}>
+      <Card style={{ padding: 20, marginBottom: 16, borderRadius: 8, border: `1px solid ${BORDER}`, background: 'white' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
+          <div style={{ 
+            width: 40, 
+            height: 40, 
+            borderRadius: 8, 
+            background: LIGHT_GRAY,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+            <Storage24Regular style={{ color: GRAY, fontSize: 20 }} />
+          </div>
+          <div>
+            <Text style={{ fontWeight: 600, fontSize: 16, display: 'block', color: '#1a1a1a' }}>Storage Drives</Text>
+            <Caption1 style={{ color: GRAY }}>{diskInfo.disks?.length || 0} drives</Caption1>
+          </div>
         </div>
-      )}
-    </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: 16 }}>
+          {(diskInfo.disks || []).map((disk, idx) => {
+            const size = disk.size || 1
+            const used = disk.used || 0
+            const usagePercent = (used / size) * 100
+            const statusColor = usagePercent > 90 ? '#c42b1c' : usagePercent > 70 ? '#ca5010' : ACCENT
+
+            return (
+              <Card key={idx} style={{ 
+                padding: 20, 
+                borderRadius: 8, 
+                border: `1px solid ${BORDER}`,
+                background: 'white',
+                boxShadow: 'none'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12, marginBottom: 16 }}>
+                  <div style={{ 
+                    width: 44, 
+                    height: 44, 
+                    borderRadius: 8, 
+                    background: LIGHT_GRAY,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                    <Storage24Regular style={{ color: GRAY, fontSize: 22 }} />
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <Text style={{ fontWeight: 600, display: 'block', fontSize: 15, color: '#1a1a1a' }}>{disk.mount || 'Unknown'}</Text>
+                    <Caption1 style={{ color: GRAY }}>{disk.fs || 'N/A'} - {disk.type || 'N/A'}</Caption1>
+                  </div>
+                  <div style={{ 
+                    padding: '4px 8px', 
+                    borderRadius: 4, 
+                    background: disk.rw ? LIGHT_GRAY : LIGHT_GRAY,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 4
+                  }}>
+                    {disk.rw ? (
+                      <LockOpen16Regular style={{ fontSize: 12, color: '#107c10' }} />
+                    ) : (
+                      <LockClosed16Regular style={{ fontSize: 12, color: GRAY }} />
+                    )}
+                    <Caption1 style={{ color: disk.rw ? '#107c10' : GRAY, fontSize: 11 }}>
+                      {disk.rw ? 'RW' : 'RO'}
+                    </Caption1>
+                  </div>
+                </div>
+
+                <div style={{ marginBottom: 16 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
+                    <Caption1 style={{ color: GRAY }}>{formatBytes(used)} used</Caption1>
+                    <Body2 style={{ fontWeight: 600, color: '#1a1a1a' }}>{usagePercent.toFixed(1)}%</Body2>
+                  </div>
+                  <ProgressBar value={Math.min(usagePercent, 100) / 100} color={statusColor} style={{ height: 8 }} />
+                </div>
+
+                <div style={{ 
+                  padding: 12, 
+                  background: LIGHT_GRAY, 
+                  borderRadius: 6,
+                  display: 'flex',
+                  justifyContent: 'space-between'
+                }}>
+                  <div>
+                    <Caption1 style={{ color: GRAY, display: 'block', marginBottom: 4 }}>Available</Caption1>
+                    <Body2 style={{ fontWeight: 500, color: '#1a1a1a' }}>{formatBytes(disk.available)}</Body2>
+                  </div>
+                  <div style={{ textAlign: 'right' }}>
+                    <Caption1 style={{ color: GRAY, display: 'block', marginBottom: 4 }}>Total</Caption1>
+                    <Body2 style={{ fontWeight: 500, color: '#1a1a1a' }}>{formatBytes(size)}</Body2>
+                  </div>
+                </div>
+              </Card>
+            )
+          })}
+        </div>
+
+        {(diskInfo.disks || []).length === 0 && (
+          <Text>No disk information found</Text>
+        )}
+      </Card>
+    </FluentProvider>
   )
 }

@@ -1,5 +1,22 @@
 import { useState, useEffect } from 'react'
 import {
+  FluentProvider,
+  webLightTheme,
+  Card,
+  Text,
+  Button,
+  Body2,
+  Caption1,
+} from '@fluentui/react-components'
+import {
+  ArrowTrendingLines24Regular,
+  Globe24Regular,
+  ArrowDown24Regular,
+  ArrowUp24Regular,
+  PlugConnected24Regular,
+  PlugDisconnected24Regular,
+} from '@fluentui/react-icons'
+import {
   LineChart,
   Line,
   XAxis,
@@ -10,7 +27,11 @@ import {
   ResponsiveContainer,
 } from 'recharts'
 import { apiCallJSON } from '../utils/api'
-import './NetworkTab.css'
+
+const ACCENT = '#0078d4'
+const GRAY = '#666666'
+const LIGHT_GRAY = '#f3f3f3'
+const BORDER = '#e5e5e5'
 
 export default function NetworkTab() {
   const [networkInfo, setNetworkInfo] = useState(null)
@@ -57,148 +78,207 @@ export default function NetworkTab() {
   }
 
   if (!ready || !networkInfo) {
-    return <div className="win-loading">Loading...</div>
+    return (
+      <FluentProvider theme={webLightTheme}>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 200 }}>
+          <Text>Loading...</Text>
+        </div>
+      </FluentProvider>
+    )
   }
 
+  const TabButton = ({ id, label, icon: Icon, active, onClick }) => (
+    <Button
+      appearance={active ? 'primary' : 'subtle'}
+      onClick={onClick}
+      style={{ borderRadius: 6 }}
+    >
+      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+        <Icon style={{ fontSize: 16 }} />
+        {label}
+      </div>
+    </Button>
+  )
+
   return (
-    <div className="win-network">
-      <div className="win-tabs">
-        <button 
-          className={`win-tab-btn ${selectedTab === 'stats' ? 'active' : ''}`}
-          onClick={() => setSelectedTab('stats')}
-        >
-          Statistics
-        </button>
-        <button 
-          className={`win-tab-btn ${selectedTab === 'interfaces' ? 'active' : ''}`}
-          onClick={() => setSelectedTab('interfaces')}
-        >
-          Interfaces
-        </button>
+    <FluentProvider theme={webLightTheme}>
+      <div style={{ display: 'flex', gap: 8, marginBottom: 20 }}>
+        <TabButton 
+          id="stats" 
+          label="Statistics" 
+          icon={ArrowTrendingLines24Regular}
+          active={selectedTab === 'stats'} 
+          onClick={() => setSelectedTab('stats')} 
+        />
+        <TabButton 
+          id="interfaces" 
+          label="Interfaces" 
+          icon={Globe24Regular}
+          active={selectedTab === 'interfaces'} 
+          onClick={() => setSelectedTab('interfaces')} 
+        />
       </div>
 
       {selectedTab === 'stats' && (
-        <div className="win-stats-content">
-          {networkHistory.length > 1 && (
-            <div className="app-card">
-              <div className="app-card-header">
-                <div className="win-card-icon">
-                  <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-                    <path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/>
-                  </svg>
-                </div>
-                <h3 className="win-card-title">Network Traffic</h3>
-              </div>
-              <div className="app-card-body">
-                <ResponsiveContainer width="100%" height={280}>
-                  <LineChart data={networkHistory} margin={{ top: 5, right: 30, left: 0, bottom: 5 }}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
-                    <XAxis dataKey="time" stroke="#666" style={{ fontSize: '11px' }} />
-                    <YAxis stroke="#666" style={{ fontSize: '11px' }} />
-                    <Tooltip formatter={(value) => formatBytes(value)} contentStyle={{ backgroundColor: '#fff', border: '1px solid #e0e0e0', fontSize: '12px' }} />
-                    <Legend />
-                    <Line type="monotone" dataKey="rx" stroke="#0078d4" dot={false} name="Download" />
-                    <Line type="monotone" dataKey="tx" stroke="#107c10" dot={false} name="Upload" />
-                  </LineChart>
-                </ResponsiveContainer>
-              </div>
+        <Card style={{ padding: 20, marginBottom: 16, borderRadius: 8, border: `1px solid ${BORDER}`, background: 'white' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
+            <div style={{ 
+              width: 40, 
+              height: 40, 
+              borderRadius: 8, 
+              background: LIGHT_GRAY,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+              <ArrowTrendingLines24Regular style={{ color: GRAY, fontSize: 20 }} />
             </div>
-          )}
+            <Text style={{ fontWeight: 600, fontSize: 16, color: '#1a1a1a' }}>Network Traffic</Text>
+          </div>
 
-          <div className="app-card">
-            <div className="app-card-header">
-              <div className="win-card-icon">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-                  <path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/>
-                </svg>
-              </div>
-              <h3 className="win-card-title">Summary</h3>
+          {networkHistory.length > 1 && (
+            <ResponsiveContainer width="100%" height={280}>
+              <LineChart data={networkHistory} margin={{ top: 5, right: 30, left: 0, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
+                <XAxis dataKey="time" stroke="#666" style={{ fontSize: '11px' }} />
+                <YAxis stroke="#666" style={{ fontSize: '11px' }} tickFormatter={(v) => formatBytes(v)} />
+                <Tooltip formatter={(value) => formatBytes(value)} contentStyle={{ backgroundColor: '#fff', border: '1px solid #e0e0e0', fontSize: '12px' }} />
+                <Legend />
+                <Line type="monotone" dataKey="rx" stroke={ACCENT} dot={false} name="Download" strokeWidth={2} />
+                <Line type="monotone" dataKey="tx" stroke="#107c10" dot={false} name="Upload" strokeWidth={2} />
+              </LineChart>
+            </ResponsiveContainer>
+          )}
+        </Card>
+      )}
+
+      {selectedTab === 'stats' && (
+        <Card style={{ padding: 20, marginBottom: 16, borderRadius: 8, border: `1px solid ${BORDER}`, background: 'white' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
+            <div style={{ 
+              width: 40, 
+              height: 40, 
+              borderRadius: 8, 
+              background: LIGHT_GRAY,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+              <Globe24Regular style={{ color: GRAY, fontSize: 20 }} />
             </div>
-            <div className="app-card-body">
-              <div className="win-summary-grid">
-                {(networkInfo.interfaces || []).map((net, idx) => (
-                  <div key={idx} className="win-summary-item">
-                    <div className="win-iface-name">{net.iface || 'Unknown'}</div>
-                    <div className="win-iface-metrics">
-                      <div className="win-iface-metric">
-                        <span className="win-metric-label">Down</span>
-                        <span className="win-metric-val">{formatBytes(net.rx_bytes)}</span>
-                      </div>
-                      <div className="win-iface-metric">
-                        <span className="win-metric-label">Up</span>
-                        <span className="win-metric-val">{formatBytes(net.tx_bytes)}</span>
-                      </div>
+            <Text style={{ fontWeight: 600, fontSize: 16, color: '#1a1a1a' }}>Interface Summary</Text>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 12 }}>
+            {(networkInfo.interfaces || []).map((net, idx) => (
+              <div key={idx} style={{ 
+                padding: 16, 
+                background: LIGHT_GRAY, 
+                borderRadius: 8,
+                border: `1px solid ${BORDER}`
+              }}>
+                <Text style={{ fontWeight: 600, display: 'block', marginBottom: 12, color: '#1a1a1a' }}>{net.iface || 'Unknown'}</Text>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <ArrowDown24Regular style={{ color: ACCENT, fontSize: 14 }} />
+                    <div>
+                      <Caption1 style={{ color: GRAY, display: 'block', fontSize: 10 }}>Download</Caption1>
+                      <Body2 style={{ fontWeight: 600, color: ACCENT }}>{formatBytes(net.rx_bytes)}</Body2>
                     </div>
                   </div>
-                ))}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <ArrowUp24Regular style={{ color: '#107c10', fontSize: 14 }} />
+                    <div>
+                      <Caption1 style={{ color: GRAY, display: 'block', fontSize: 10 }}>Upload</Caption1>
+                      <Body2 style={{ fontWeight: 600, color: '#107c10' }}>{formatBytes(net.tx_bytes)}</Body2>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
+            ))}
           </div>
-        </div>
+        </Card>
       )}
 
       {selectedTab === 'interfaces' && (
-        <div className="win-grid-3">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 16 }}>
           {(networkInfo.physicalInterfaces || []).map((iface, idx) => (
-            <div key={idx} className="app-card">
-              <div className="app-card-header">
-                <div className="win-card-icon">
-                  <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-                    <path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/>
-                  </svg>
+            <Card key={idx} style={{ 
+              padding: 20, 
+              borderRadius: 8, 
+              border: `1px solid ${BORDER}`,
+              background: 'white'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12, marginBottom: 16 }}>
+                <div style={{ 
+                  width: 44, 
+                  height: 44, 
+                  borderRadius: 8, 
+                  background: iface.operstate === 'up' ? LIGHT_GRAY : LIGHT_GRAY,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                  {iface.operstate === 'up' ? (
+                    <PlugConnected24Regular style={{ color: '#107c10', fontSize: 22 }} />
+                  ) : (
+                    <PlugDisconnected24Regular style={{ color: GRAY, fontSize: 22 }} />
+                  )}
                 </div>
-                <h3 className="win-card-title">{iface.ifname || 'Unknown'}</h3>
+                <div style={{ flex: 1 }}>
+                  <Text style={{ fontWeight: 600, display: 'block', color: '#1a1a1a' }}>{iface.ifname || 'Unknown'}</Text>
+                  <Caption1 style={{ color: iface.operstate === 'up' ? '#107c10' : GRAY }}>
+                    {iface.operstate === 'up' ? 'Connected' : 'Disconnected'}
+                  </Caption1>
+                </div>
               </div>
-              <div className="app-card-body">
-                <div className="win-iface-details">
-                  <div className="win-detail-row">
-                    <span className="win-detail-label">Status</span>
-                    <span className={`win-detail-value ${iface.iface === 'up' ? 'status-up' : 'status-down'}`}>
-                      {iface.iface === 'up' ? 'Up' : 'Down'}
-                    </span>
+
+              <div style={{ display: 'grid', gap: 10 }}>
+                {iface.ip4 && (
+                  <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 12px', background: LIGHT_GRAY, borderRadius: 6 }}>
+                    <Caption1 style={{ color: GRAY }}>IPv4</Caption1>
+                    <Body2 style={{ fontFamily: 'monospace', fontSize: 12, color: '#1a1a1a' }}>{iface.ip4}</Body2>
                   </div>
-                  {iface.ip4 && (
-                    <div className="win-detail-row">
-                      <span className="win-detail-label">IPv4</span>
-                      <span className="win-detail-value">{iface.ip4}</span>
-                    </div>
-                  )}
-                  {iface.ip6 && (
-                    <div className="win-detail-row">
-                      <span className="win-detail-label">IPv6</span>
-                      <span className="win-detail-value" style={{ fontSize: '11px' }}>{iface.ip6}</span>
-                    </div>
-                  )}
-                  {iface.mac && (
-                    <div className="win-detail-row">
-                      <span className="win-detail-label">MAC</span>
-                      <span className="win-detail-value" style={{ fontSize: '11px' }}>{iface.mac}</span>
-                    </div>
-                  )}
-                  {iface.netmask && (
-                    <div className="win-detail-row">
-                      <span className="win-detail-label">Netmask</span>
-                      <span className="win-detail-value">{iface.netmask}</span>
-                    </div>
-                  )}
-                  {iface.speed && (
-                    <div className="win-detail-row">
-                      <span className="win-detail-label">Speed</span>
-                      <span className="win-detail-value">{iface.speed} Mbps</span>
-                    </div>
-                  )}
-                </div>
+                )}
+                {iface.ip6 && (
+                  <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 12px', background: LIGHT_GRAY, borderRadius: 6 }}>
+                    <Caption1 style={{ color: GRAY }}>IPv6</Caption1>
+                    <Body2 style={{ fontFamily: 'monospace', fontSize: 10, color: '#1a1a1a' }}>{iface.ip6?.split(',')[0]}</Body2>
+                  </div>
+                )}
+                {iface.mac && (
+                  <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 12px', background: LIGHT_GRAY, borderRadius: 6 }}>
+                    <Caption1 style={{ color: GRAY }}>MAC</Caption1>
+                    <Body2 style={{ fontFamily: 'monospace', fontSize: 11, color: '#1a1a1a' }}>{iface.mac}</Body2>
+                  </div>
+                )}
+                {iface.netmask && (
+                  <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 12px', background: LIGHT_GRAY, borderRadius: 6 }}>
+                    <Caption1 style={{ color: GRAY }}>Netmask</Caption1>
+                    <Body2 style={{ color: '#1a1a1a' }}>{iface.netmask}</Body2>
+                  </div>
+                )}
+                {iface.speed && (
+                  <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 12px', background: LIGHT_GRAY, borderRadius: 6 }}>
+                    <Caption1 style={{ color: GRAY }}>Speed</Caption1>
+                    <Body2 style={{ color: '#1a1a1a' }}>{iface.speed} Mbps</Body2>
+                  </div>
+                )}
+                {iface.type && (
+                  <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 12px', background: LIGHT_GRAY, borderRadius: 6 }}>
+                    <Caption1 style={{ color: GRAY }}>Type</Caption1>
+                    <Body2 style={{ color: '#1a1a1a' }}>{iface.type}</Body2>
+                  </div>
+                )}
               </div>
-            </div>
+            </Card>
           ))}
         </div>
       )}
 
       {selectedTab === 'interfaces' && (networkInfo.physicalInterfaces || []).length === 0 && (
-        <div className="win-empty">
-          <p>No network interfaces found</p>
-        </div>
+        <Text>No network interfaces found</Text>
       )}
-    </div>
+    </FluentProvider>
   )
 }

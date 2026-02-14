@@ -1,6 +1,21 @@
 import { useState, useEffect } from 'react'
+import {
+  FluentProvider,
+  webLightTheme,
+  Card,
+  Text,
+  Input,
+  ProgressBar,
+  Body2,
+  Caption1,
+} from '@fluentui/react-components'
+import { Settings24Regular, Search24Regular } from '@fluentui/react-icons'
 import { apiCallJSON } from '../utils/api'
-import './ProcessesTab.css'
+
+const ACCENT = '#0078d4'
+const GRAY = '#666666'
+const LIGHT_GRAY = '#f3f3f3'
+const BORDER = '#e5e5e5'
 
 export default function ProcessesTab() {
   const [processes, setProcesses] = useState([])
@@ -58,98 +73,121 @@ export default function ProcessesTab() {
 
   const SortIndicator = ({ column }) => {
     if (sortBy !== column) return null
-    return <span className="win-sort-indicator">{sortOrder === 'desc' ? ' ▼' : ' ▲'}</span>
+    return <span style={{ fontSize: 10, marginLeft: 4 }}>{sortOrder === 'desc' ? '↓' : '↑'}</span>
   }
 
   if (!ready) {
-    return <div className="win-loading">Loading...</div>
+    return (
+      <FluentProvider theme={webLightTheme}>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 200 }}>
+          <Text>Loading...</Text>
+        </div>
+      </FluentProvider>
+    )
   }
 
+  const HeaderButton = ({ column, children }) => (
+    <button 
+      onClick={() => handleSort(column)}
+      style={{ 
+        background: 'none', 
+        border: 'none', 
+        cursor: 'pointer', 
+        fontWeight: 600,
+        fontSize: 12,
+        color: sortBy === column ? ACCENT : GRAY,
+        fontFamily: 'inherit',
+        padding: 0,
+        display: 'flex',
+        alignItems: 'center'
+      }}
+    >
+      {children}
+      <SortIndicator column={column} />
+    </button>
+  )
+
   return (
-    <div className="win-processes">
-      <div className="app-card">
-        <div className="app-card-header">
-          <div className="win-card-icon">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-              <path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/>
-            </svg>
+    <FluentProvider theme={webLightTheme}>
+      <Card style={{ padding: 20, borderRadius: 8, border: `1px solid ${BORDER}`, background: 'white' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div style={{ 
+              width: 40, 
+              height: 40, 
+              borderRadius: 8, 
+              background: LIGHT_GRAY,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+              <Settings24Regular style={{ color: GRAY, fontSize: 20 }} />
+            </div>
+            <div>
+              <Text style={{ fontWeight: 600, fontSize: 16, display: 'block', color: '#1a1a1a' }}>Running Processes</Text>
+              <Caption1 style={{ color: GRAY }}>{filteredProcesses.length} processes</Caption1>
+            </div>
           </div>
-          <h3 className="win-card-title">Processes ({filteredProcesses.length})</h3>
+          <div style={{ width: 280 }}>
+            <Input
+              type="search"
+              placeholder="Search by name or PID..."
+              value={searchText}
+              onChange={(e, data) => setSearchText(data.value)}
+              contentBefore={<Search24Regular style={{ color: GRAY }} />}
+              style={{ width: '100%' }}
+            />
+          </div>
         </div>
 
-        <div className="win-toolbar">
-          <input
-            type="search"
-            placeholder="Search by name or PID..."
-            value={searchText}
-            onChange={(e) => setSearchText(e.target.value)}
-            className="app-input-text"
-            style={{ padding: '8px 12px' }}
-          />
-        </div>
-
-        <div className="win-table-wrapper">
-          <table className="win-table">
+        <div style={{ overflowX: 'auto', borderRadius: 8, border: `1px solid ${BORDER}` }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, background: 'white' }}>
             <thead>
-              <tr>
-                <th style={{ width: '80px' }}>
-                  <button className="win-sort-btn" onClick={() => handleSort('pid')}>
-                    PID <SortIndicator column="pid" />
-                  </button>
+              <tr style={{ background: LIGHT_GRAY }}>
+                <th style={{ width: 80, textAlign: 'left', padding: '12px 12px', borderBottom: `1px solid ${BORDER}` }}>
+                  <HeaderButton column="pid">PID</HeaderButton>
                 </th>
-                <th style={{ flex: 1 }}>
-                  <button className="win-sort-btn" onClick={() => handleSort('name')}>
-                    Name <SortIndicator column="name" />
-                  </button>
+                <th style={{ textAlign: 'left', padding: '12px 12px', borderBottom: `1px solid ${BORDER}` }}>
+                  <HeaderButton column="name">Name</HeaderButton>
                 </th>
-                <th style={{ width: '100px' }}>
-                  <button className="win-sort-btn" onClick={() => handleSort('cpu')}>
-                    CPU % <SortIndicator column="cpu" />
-                  </button>
+                <th style={{ width: 140, textAlign: 'left', padding: '12px 12px', borderBottom: `1px solid ${BORDER}` }}>
+                  <HeaderButton column="cpu">CPU %</HeaderButton>
                 </th>
-                <th style={{ width: '100px' }}>
-                  <button className="win-sort-btn" onClick={() => handleSort('mem')}>
-                    Memory <SortIndicator column="mem" />
-                  </button>
+                <th style={{ width: 100, textAlign: 'left', padding: '12px 12px', borderBottom: `1px solid ${BORDER}` }}>
+                  <HeaderButton column="mem">Memory</HeaderButton>
                 </th>
-                <th style={{ width: '100px' }}>
-                  <button className="win-sort-btn" onClick={() => handleSort('user')}>
-                    User <SortIndicator column="user" />
-                  </button>
+                <th style={{ width: 120, textAlign: 'left', padding: '12px 12px', borderBottom: `1px solid ${BORDER}` }}>
+                  <HeaderButton column="user">User</HeaderButton>
                 </th>
               </tr>
             </thead>
             <tbody>
               {filteredProcesses.map((process) => (
-                <tr key={process.pid} className="win-tr">
-                  <td className="win-td pid">{process.pid}</td>
-                  <td className="win-td name">{process.name || 'Unknown'}</td>
-                  <td className="win-td">
-                    <div className="win-metric-bar">
-                      <div
-                        className="win-metric-fill"
-                        style={{
-                          width: `${Math.min(process.cpu || 0, 100)}%`,
-                          backgroundColor: (process.cpu || 0) > 80 ? '#d13438' : '#0078d4'
-                        }}
-                      ></div>
+                <tr key={process.pid} style={{ borderBottom: `1px solid ${BORDER}` }}>
+                  <td style={{ padding: '10px 12px', fontFamily: 'monospace', fontSize: 12, color: '#1a1a1a' }}>{process.pid}</td>
+                  <td style={{ padding: '10px 12px', fontWeight: 500, color: '#1a1a1a' }}>{process.name || 'Unknown'}</td>
+                  <td style={{ padding: '10px 12px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <ProgressBar 
+                        value={Math.min(process.cpu || 0, 100) / 100}
+                        color={(process.cpu || 0) > 80 ? '#c42b1c' : ACCENT} 
+                        style={{ flex: 1, height: 6 }}
+                      />
+                      <span style={{ fontSize: 12, minWidth: 45, textAlign: 'right', fontFamily: 'monospace', color: '#1a1a1a' }}>
+                        {((process.cpu || 0)).toFixed(1)}%
+                      </span>
                     </div>
-                    <span className="win-metric-text">{((process.cpu || 0)).toFixed(1)}%</span>
                   </td>
-                  <td className="win-td mem">{formatMemory(process.mem)}</td>
-                  <td className="win-td user">{process.user || 'N/A'}</td>
+                  <td style={{ padding: '10px 12px', fontFamily: 'monospace', fontSize: 12, color: '#1a1a1a' }}>
+                    {formatMemory(process.mem)}
+                  </td>
+                  <td style={{ padding: '10px 12px', fontSize: 12, color: GRAY }}>{process.user || 'N/A'}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-
-        {filteredProcesses.length === 0 && (
-          <div className="win-empty">
-            <p>No processes found</p>
-          </div>
-        )}
-      </div>
-    </div>
+      </Card>
+    </FluentProvider>
   )
 }

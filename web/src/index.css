@@ -1,28 +1,13 @@
-@import 'windows-ui-fabric/dist/windows-ui.min.css';
-
-* {
+/* Base styles only - Fluent UI provides the rest */
+html, body, #root {
+  height: 100%;
+  width: 100%;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
-}
-
-html {
-  font-size: 14px;
-  font-family: 'Segoe UI', 'Helvetica Neue', sans-serif;
 }
 
 body {
+  font-family: 'Segoe UI Variable', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
   background: #f5f5f5;
-  color: #333;
-}
-
-#root {
-  height: 100vh;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-}
-
-code {
-  font-family: 'Consolas', 'Monaco', monospace;
+  color: #1a1a1a;
 }

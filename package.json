@@ -1,5 +1,5 @@
 {
-  "name": "onipanel",
+  "name": "okpanel",
   "version": "1.0.0",
   "description": "A server status monitoring dashboard with Linux system information",
   "main": "server/index.js",
@@ -7,15 +7,14 @@
     "dev": "concurrently \"npm run server:dev\" \"npm run web:dev\"",
     "dev:server": "nodemon server/index.js",
     "dev:web": "vite --host",
-    "server:dev": "nodemon server/index.js",
-    "web:dev": "vite --host",
     "build": "vite build",
     "preview": "vite preview",
     "start": "node server/index.js",
     "install:all": "npm install"
   },
   "dependencies": {
-    "@fluentui/react-components": "^9.0.0",
+    "@fluentui/react-components": "^9.73.0",
+    "@fluentui/react-icons": "^2.0.319",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "express": "^4.18.2",
@@ -23,8 +22,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "recharts": "^2.10.3",
-    "systeminformation": "^5.16.10",
-    "windows-ui-fabric": "github:virtualvivek/windows-ui"
+    "systeminformation": "^5.16.10"
   },
   "devDependencies": {
     "@types/react": "^18.2.37",

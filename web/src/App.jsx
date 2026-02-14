@@ -1,11 +1,37 @@
 import { useState, useEffect } from 'react'
+import {
+  FluentProvider,
+  webLightTheme,
+  Avatar,
+  Divider,
+  Button,
+  Text,
+  Subtitle1,
+  Subtitle2,
+  Body1,
+  Caption1,
+} from '@fluentui/react-components'
+import {
+  ChartMultiple24Regular,
+  Settings24Regular,
+  Storage24Regular,
+  Globe24Regular,
+  SignOut24Regular,
+  DesktopSignal24Regular,
+} from '@fluentui/react-icons'
 import Login from './components/Login'
 import OverviewTab from './components/OverviewTab'
 import ProcessesTab from './components/ProcessesTab'
 import DiskTab from './components/DiskTab'
 import NetworkTab from './components/NetworkTab'
-import Header from './components/Header'
 import './App.css'
+
+const navItems = [
+  { id: 'overview', label: 'Overview', icon: ChartMultiple24Regular },
+  { id: 'processes', label: 'Processes', icon: Settings24Regular },
+  { id: 'disk', label: 'Storage', icon: Storage24Regular },
+  { id: 'network', label: 'Network', icon: Globe24Regular },
+]
 
 function App() {
   const [selectedTab, setSelectedTab] = useState('overview')
@@ -47,9 +73,11 @@ function App() {
 
   if (loading || !loginPath) {
     return (
-      <div className="win-page-container">
-        <div className="win-loader"></div>
-      </div>
+      <FluentProvider theme={webLightTheme}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
+          <Text>Loading...</Text>
+        </div>
+      </FluentProvider>
     )
   }
 
@@ -57,17 +85,31 @@ function App() {
   
   if (!isLoggedIn && currentPath !== loginPath) {
     return (
-      <div className="win-page-container">
-        <div className="win-forbidden">
-          <div className="win-forbidden-icon">
-            <svg viewBox="0 24" width="0 24 56" height="56" fill="currentColor">
-              <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
-            </svg>
+      <FluentProvider theme={webLightTheme}>
+        <div style={{ 
+          display: 'flex', 
+          flexDirection: 'column',
+          alignItems: 'center', 
+          justifyContent: 'center', 
+          height: '100vh',
+          background: '#0078d4',
+        }}>
+          <div style={{ 
+            width: 48, 
+            height: 48, 
+            borderRadius: 8, 
+            background: 'rgba(255,255,255,0.15)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginBottom: 24
+          }}>
+            <DesktopSignal24Regular style={{ color: 'white', fontSize: 24 }} />
           </div>
-          <h2>Access Restricted</h2>
-          <p>Please sign in to access this page</p>
+          <Subtitle1 style={{ color: 'white', fontWeight: 600 }}>Access Restricted</Subtitle1>
+          <Caption1 style={{ color: 'rgba(255,255,255,0.7)', marginTop: 8 }}>Please sign in to access this page</Caption1>
         </div>
-      </div>
+      </FluentProvider>
     )
   }
 
@@ -75,38 +117,134 @@ function App() {
     return <Login onLoginSuccess={handleLoginSuccess} />
   }
 
-  const tabs = [
-    { id: 'overview', label: 'Overview' },
-    { id: 'processes', label: 'Processes' },
-    { id: 'disk', label: 'Storage' },
-    { id: 'network', label: 'Network' },
-  ]
+  const getContent = () => {
+    switch (selectedTab) {
+      case 'overview': return <OverviewTab />
+      case 'processes': return <ProcessesTab />
+      case 'disk': return <DiskTab />
+      case 'network': return <NetworkTab />
+      default: return <OverviewTab />
+    }
+  }
+
+  const getTitle = () => {
+    const titles = {
+      overview: 'Overview',
+      processes: 'Processes',
+      disk: 'Storage',
+      network: 'Network',
+    }
+    return titles[selectedTab] || 'Settings'
+  }
+
+  const NavIcon = ({ icon: Icon, active }) => (
+    <Icon style={{ fontSize: 20, color: active ? '#0078d4' : '#606060' }} />
+  )
 
   return (
-    <div className="win-app">
-      <Header onLogout={handleLogout} user={user} />
-      
-      <div className="win-nav">
-        <div className="win-nav-bar">
-          {tabs.map(tab => (
-            <button
-              key={tab.id}
-              className={`win-nav-item ${selectedTab === tab.id ? 'active' : ''}`}
-              onClick={() => setSelectedTab(tab.id)}
+    <FluentProvider theme={webLightTheme}>
+      <div style={{ display: 'flex', height: '100vh', overflow: 'hidden', background: '#f5f5f5' }}>
+        <div style={{ 
+          width: 280, 
+          background: 'white',
+          borderRight: '1px solid #e5e5e5',
+          display: 'flex',
+          flexDirection: 'column',
+          boxShadow: '2px 0 8px rgba(0,0,0,0.04)'
+        }}>
+          <div style={{ padding: '20px 20px 16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              <div style={{ 
+                width: 36, 
+                height: 36, 
+                borderRadius: 8, 
+                background: 'linear-gradient(135deg, #0078d4, #005a9e)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}>
+                <DesktopSignal24Regular style={{ color: 'white', fontSize: 20 }} />
+              </div>
+              <div>
+                <Text style={{ fontSize: 18, fontWeight: 600, display: 'block', lineHeight: 1.2 }}>OniPanel</Text>
+                <Caption1 style={{ color: '#666', display: 'block' }}>Server Monitoring</Caption1>
+              </div>
+            </div>
+          </div>
+
+          <nav style={{ flex: 1, padding: '0 8px' }}>
+            {navItems.map(item => {
+              const isActive = selectedTab === item.id
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => setSelectedTab(item.id)}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 12,
+                    width: '100%',
+                    padding: '10px 12px',
+                    border: 'none',
+                    background: isActive ? 'rgba(0,120,212,0.08)' : 'transparent',
+                    borderRadius: 6,
+                    cursor: 'pointer',
+                    textAlign: 'left',
+                    marginBottom: 2,
+                    color: isActive ? '#0078d4' : '#424242',
+                    fontWeight: isActive ? 600 : 400,
+                    fontSize: 14,
+                    fontFamily: 'inherit',
+                    transition: 'all 0.15s ease',
+                  }}
+                >
+                  <NavIcon icon={item.icon} active={isActive} />
+                  {item.label}
+                </button>
+              )
+            })}
+          </nav>
+
+          <Divider style={{ margin: '8px 16px' }} />
+
+          <div style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 12 }}>
+            <Avatar name={user?.username || 'Admin'} size={36} />
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <Body1 style={{ fontWeight: 500, lineHeight: 1.3 }}>{user?.username || 'Admin'}</Body1>
+              <Caption1 style={{ color: '#666', display: 'block', marginTop: 2 }}>Administrator</Caption1>
+            </div>
+            <Button 
+              appearance="subtle" 
+              onClick={handleLogout}
+              title="Sign out"
+              style={{ minWidth: 32 }}
             >
-              {tab.label}
-            </button>
-          ))}
+              <SignOut24Regular />
+            </Button>
+          </div>
+        </div>
+
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+          <div style={{ 
+            padding: '20px 32px', 
+            borderBottom: '1px solid #e5e5e5',
+            background: 'white',
+            boxShadow: '0 1px 3px rgba(0,0,0,0.04)'
+          }}>
+            <Subtitle1 style={{ fontWeight: 600, fontSize: 24 }}>{getTitle()}</Subtitle1>
+          </div>
+
+          <div style={{ 
+            flex: 1, 
+            overflowY: 'auto', 
+            padding: 24,
+            background: '#f5f5f5'
+          }}>
+            {getContent()}
+          </div>
         </div>
       </div>
-
-      <div className="win-content">
-        {selectedTab === 'overview' && <OverviewTab />}
-        {selectedTab === 'processes' && <ProcessesTab />}
-        {selectedTab === 'disk' && <DiskTab />}
-        {selectedTab === 'network' && <NetworkTab />}
-      </div>
-    </div>
+    </FluentProvider>
   )
 }
 

@@ -151,6 +151,45 @@ app.get('/api/system-info', authenticateToken, async (req, res) => {
   }
 });
 
+// 获取 CPU 详细信息
+app.get('/api/cpu-info', authenticateToken, async (req, res) => {
+  try {
+    const [cpu, cpuSpeed, currentLoad] = await Promise.all([
+      si.cpu(),
+      si.cpuCurrentSpeed(),
+      si.currentLoad(),
+    ]);
+
+    let temps = { main: 0, cores: [] };
+    try {
+      const thermal = await si.cpuTemperature();
+      temps = {
+        main: thermal.main || 0,
+        cores: thermal.cores || [],
+      };
+    } catch (e) {
+      // Temperature not available
+    }
+
+    res.json({
+      manufacturer: cpu.manufacturer,
+      brand: cpu.brand,
+      cores: cpu.cores,
+      physicalCores: cpu.physicalCores,
+      speed: cpu.speed,
+      currentSpeed: cpuSpeed.avg || cpuSpeed.min || 0,
+      minSpeed: cpuSpeed.min || 0,
+      maxSpeed: cpuSpeed.max || 0,
+      perCoreSpeed: cpuSpeed.cpus || [],
+      load: currentLoad.currentLoad,
+      loadPerCpu: currentLoad.cpus.map(c => c.load),
+      temps: temps,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // 获取 CPU 使用率
 app.get('/api/cpu-load', authenticateToken, async (req, res) => {
   try {

@@ -1,4 +1,15 @@
-import './SystemInfoPanel.css'
+import {
+  FluentProvider,
+  webLightTheme,
+  Card,
+  Text,
+  Caption1,
+} from '@fluentui/react-components'
+import {
+  Desktop24Regular,
+  Server24Regular,
+  Memory16Regular,
+} from '@fluentui/react-icons'
 
 export default function SystemInfoPanel({ systemInfo }) {
   if (!systemInfo) return null
@@ -11,54 +22,41 @@ export default function SystemInfoPanel({ systemInfo }) {
     return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i]
   }
 
+  const infoItems = [
+    { label: 'OS', value: systemInfo.os?.distro || systemInfo.os?.platform || 'N/A', icon: Desktop24Regular },
+    { label: 'Kernel', value: systemInfo.os?.kernel || 'N/A', icon: null },
+    { label: 'CPU', value: (systemInfo.cpu?.brand || 'N/A').substring(0, 40), icon: Server24Regular },
+    { label: 'Cores', value: `${systemInfo.cpu?.cores || 0} / ${systemInfo.cpu?.physicalCores || 0}`, icon: null },
+    { label: 'Freq', value: `${(systemInfo.cpu?.currentSpeed || 0).toFixed(2)} GHz`, icon: null },
+    { label: 'Memory', value: formatBytes(systemInfo.memory?.total), icon: Memory16Regular },
+    { label: 'Arch', value: systemInfo.os?.arch || 'N/A', icon: null },
+    { label: 'Host', value: systemInfo.os?.hostname || 'N/A', icon: null },
+  ]
+
   return (
-    <div className="win-system-info">
-      <div className="app-card">
-        <div className="app-card-header">
-          <div className="win-card-icon">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-              <path d="M20 18c1.1 0 1.99-.9 1.99-2L22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/>
-            </svg>
-          </div>
-          <h3 className="win-card-title">System Information</h3>
+    <FluentProvider theme={webLightTheme}>
+      <Card style={{ 
+        padding: 16, 
+        marginBottom: 16, 
+        borderRadius: 8,
+        boxShadow: '0 2px 6px rgba(0,0,0,0.04)',
+        background: 'linear-gradient(135deg, #0078d4 0%, #005a9e 100%)'
+      }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}>
+          {infoItems.map((item, idx) => {
+            const Icon = item.icon
+            return (
+              <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                {Icon && <Icon style={{ color: 'rgba(255,255,255,0.7)', fontSize: 16 }} />}
+                <div>
+                  <Caption1 style={{ color: 'rgba(255,255,255,0.7)', display: 'block', marginBottom: 2 }}>{item.label}</Caption1>
+                  <Text style={{ fontSize: 13, fontWeight: 500, display: 'block', color: 'white' }}>{item.value}</Text>
+                </div>
+              </div>
+            )
+          })}
         </div>
-        <div className="app-card-body">
-          <div className="win-info-grid">
-            <div className="win-info-row">
-              <span className="win-info-label">OS</span>
-              <span className="win-info-value">{systemInfo.os?.distro || systemInfo.os?.platform || 'N/A'}</span>
-            </div>
-            <div className="win-info-row">
-              <span className="win-info-label">Kernel</span>
-              <span className="win-info-value">{systemInfo.os?.kernel || 'N/A'}</span>
-            </div>
-            <div className="win-info-row">
-              <span className="win-info-label">CPU</span>
-              <span className="win-info-value">{systemInfo.cpu?.brand || 'N/A'}</span>
-            </div>
-            <div className="win-info-row">
-              <span className="win-info-label">Cores</span>
-              <span className="win-info-value">{systemInfo.cpu?.cores || 0} / {systemInfo.cpu?.physicalCores || 0} Physical</span>
-            </div>
-            <div className="win-info-row">
-              <span className="win-info-label">Speed</span>
-              <span className="win-info-value">{(systemInfo.cpu?.speed || 0).toFixed(2)} GHz</span>
-            </div>
-            <div className="win-info-row">
-              <span className="win-info-label">Memory</span>
-              <span className="win-info-value">{formatBytes(systemInfo.memory?.total)}</span>
-            </div>
-            <div className="win-info-row">
-              <span className="win-info-label">Arch</span>
-              <span className="win-info-value">{systemInfo.os?.arch || 'N/A'}</span>
-            </div>
-            <div className="win-info-row">
-              <span className="win-info-label">Version</span>
-              <span className="win-info-value">{systemInfo.os?.release || 'N/A'}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+      </Card>
+    </FluentProvider>
   )
 }
